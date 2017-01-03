@@ -8,3 +8,7 @@ Some resources - in this case, game data - are better stored in simple format of
 1. Run `composer install`
 1. ?
 1. PROFIT!
+
+## Architecture
+
+Originally based on [RPG Silex boilerplate](/mikron-ia/rpg-boilerplate-silex). Intended for non-interactive use.

@@ -1,5 +1,5 @@
 {
-  "name": "mikron-ia/rpg-boilerplate-silex",
+  "name": "mikron-ia/json2doc-poc",
   "license": "GPL-2.0",
   "version": "0.0-dev",
   "authors": [
@@ -10,14 +10,16 @@
   ],
   "autoload": {
     "psr-4": {
-      "Mikron\\rpg\\": "src/"
+      "Mikron\\json2doc\\": "src/"
     }
   },
   "require": {
     "php": ">=5.5",
     "ext-mbstring": "*",
+    "ext-gd": "*",
+    "ext-xsl": "*",
     "silex/silex": "~1.3",
-    "doctrine/dbal": "^2.5"
+    "phpoffice/phpword": "^0.13.0"
   },
   "require-dev": {
     "phpunit/phpunit": "4.7",
