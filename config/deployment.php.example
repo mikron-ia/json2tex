@@ -1,0 +1,16 @@
+<?php
+
+return [
+    'dbEngine' => '',
+    'mysql' => [
+        'dbname' => '',
+        'user' => '',
+        'password' => '',
+        'host' => '',
+        'driver' => 'mysqli'
+    ],
+    'debug' => false,
+    'authentication' => [
+        'outgoingKey' => null,
+    ],
+];
