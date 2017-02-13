@@ -3,7 +3,6 @@
 return [
     "version" => "0.0-dev",
     "interface" => [
-        "title" => "Front",
-        "welcome" => "Welcome to the front",
+        "title" => "json-to-doc proof of concept",
     ]
 ];
