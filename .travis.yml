@@ -9,3 +9,4 @@ before_script:
 
 script:
   - composer test
+  - CODECLIMATE_REPO_TOKEN=71e19b84b0cdb8a2ea357254546633169b0688a910566ec2c36fb8e803a79b5c ./vendor/bin/test-reporter
