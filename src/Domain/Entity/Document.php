@@ -27,4 +27,20 @@ class Document
         $this->json = $json;
         $this->array = json_decode($this->json, true);
     }
+
+    /**
+     * @return string
+     */
+    public function getJson(): string
+    {
+        return $this->json;
+    }
+
+    /**
+     * @return array
+     */
+    public function getArray(): array
+    {
+        return $this->array;
+    }
 }
