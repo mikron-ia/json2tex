@@ -6,6 +6,12 @@
 ## Background
 Some resources - in this case, game data - are better stored in simple format of JSON or XML and subsequently processed into more complex formats, like DB records or DOC file containing a game manual. This project is intended to present the latter case - JSON data conversion to DOC.
 
+Desired functionalities:
+
+- Ability to write down a JSON-described text with respect to hierarchy
+- Ability to apply appropriate styles 
+- Ability to create and insert SVG files based on JSON-provided hierarchy
+
 ## Installation guide
 1. Clone the repo to desired directory
 1. Run `composer install`
