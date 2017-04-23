@@ -24,6 +24,13 @@ class Document
     private $document;
 
     /**
+     * @var string
+     */
+    private $header = '';
+
+    private $footer = '';
+
+    /**
      * Document constructor.
      * @param $json string
      */
@@ -49,10 +56,28 @@ class Document
         return $this->array;
     }
 
+    private function getContent():string
+    {
+        return "Text";
+    }
+
     public function getDocument():string
     {
         if (!$this->document) {
-            $document = "";
+            $top = '\documentclass[a4paper,final,12pt]{memoir}
+\providecommand\locale{english}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows,positioning}';
+            $start = '\begin{document}';
+            $end = '\end{document}';
+
+            $document = $top . PHP_EOL .
+                $this->header . PHP_EOL .
+                $start . PHP_EOL .
+                $this->getContent() . PHP_EOL .
+                $this->footer . PHP_EOL .
+                $end . PHP_EOL;
 
             $this->document = $document;
         }
