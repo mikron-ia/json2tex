@@ -1,9 +1,9 @@
 <?php
 
-namespace Mikron\json2doc\Tests;
+namespace Mikron\json2tex\Tests;
 
-use Mikron\json2doc\Domain\Entity\Document;
-use Mikron\json2doc\Domain\Entity\StylePack;
+use Mikron\json2tex\Domain\Entity\Document;
+use Mikron\json2tex\Domain\Entity\StylePack;
 use PHPUnit_Framework_TestCase;
 
 final class StylePackTest extends PHPUnit_Framework_TestCase
@@ -15,6 +15,6 @@ final class StylePackTest extends PHPUnit_Framework_TestCase
     {
         $object = new StylePack("");
 
-        $this->assertInstanceOf('Mikron\json2doc\Domain\Entity\StylePack', $object);
+        $this->assertInstanceOf('Mikron\json2tex\Domain\Entity\StylePack', $object);
     }
 }

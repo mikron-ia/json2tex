@@ -1,7 +1,7 @@
 # JSON to TeX maker
-[![Build Status](https://travis-ci.org/mikron-ia/json2doc-poc.svg?branch=master)](https://travis-ci.org/mikron-ia/json2doc-poc)
-[![Code Climate](https://codeclimate.com/github/mikron-ia/json2doc-poc/badges/gpa.svg)](https://codeclimate.com/github/mikron-ia/json2doc-poc)
-[![Test Coverage](https://codeclimate.com/github/mikron-ia/json2doc-poc/badges/coverage.svg)](https://codeclimate.com/github/mikron-ia/json2doc-poc/coverage)
+[![Build Status](https://travis-ci.org/mikron-ia/json2tex.svg?branch=master)](https://travis-ci.org/mikron-ia/json2tex)
+[![Code Climate](https://codeclimate.com/github/mikron-ia/json2tex/badges/gpa.svg)](https://codeclimate.com/github/mikron-ia/json2tex)
+[![Test Coverage](https://codeclimate.com/github/mikron-ia/json2tex/badges/coverage.svg)](https://codeclimate.com/github/mikron-ia/json2tex/coverage)
 
 **Please note:** this project was something else before, a JSON to DOC converter. I realised this makes very little sense, thus altered its purpose before more could be written.
 

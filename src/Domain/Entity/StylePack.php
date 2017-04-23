@@ -1,12 +1,12 @@
 <?php
 
-namespace Mikron\json2doc\Domain\Entity;
+namespace Mikron\json2tex\Domain\Entity;
 
 /**
  * Class StylePack
  * Loads and stores styles
  *
- * @package Mikron\json2doc\Domain\Entity
+ * @package Mikron\json2tex\Domain\Entity
  */
 class StylePack
 {

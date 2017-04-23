@@ -1,6 +1,6 @@
 <?php
 
-use Mikron\json2doc\Domain\Exception\MissingComponentException;
+use Mikron\json2tex\Domain\Exception\MissingComponentException;
 
 $configPath = __DIR__ . '/../config/';
 

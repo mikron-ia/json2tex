@@ -1,6 +1,6 @@
 <?php
 
-namespace Mikron\json2doc\Domain\Exception;
+namespace Mikron\json2tex\Domain\Exception;
 
 /**
  * Class MissingComponentException - used for cases where configuration file is incomplete

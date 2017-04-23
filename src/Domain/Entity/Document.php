@@ -1,13 +1,10 @@
 <?php
 
-namespace Mikron\json2doc\Domain\Entity;
-
-use PhpOffice\PhpWord\IOFactory;
-use PhpOffice\PhpWord\PhpWord;
+namespace Mikron\json2tex\Domain\Entity;
 
 /**
  * Class Document
- * @package Mikron\json2doc\Domain\Entity
+ * @package Mikron\json2tex\Domain\Entity
  */
 class Document
 {
@@ -22,7 +19,7 @@ class Document
     private $array;
 
     /**
-     * @var PhpWord
+     * @var string
      */
     private $document;
 
@@ -52,33 +49,14 @@ class Document
         return $this->array;
     }
 
-    public function getDocument():PhpWord
+    public function getDocument():string
     {
         if (!$this->document) {
-            $document = new PhpWord();
-
-            $section = $document->addSection();
-
-            $section->addText("Text");
+            $document = "";
 
             $this->document = $document;
         }
 
         return $this->document;
-    }
-
-    public function getString():string
-    {
-        if (!$this->document) {
-            $this->document = $this->getDocument();
-        }
-
-        $writer = IOFactory::createWriter($this->document);
-
-        ob_start();
-        $writer->save('php://output');
-        $output = ob_get_clean();
-
-        return $output;
     }
 }
