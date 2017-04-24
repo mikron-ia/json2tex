@@ -3,31 +3,36 @@
 namespace Mikron\json2tex\Domain\Entity;
 
 /**
- * Class StylePack
- * Loads and stores styles
+ * Simple wrapper on styles
  *
+ * @todo Add loading from file
  * @package Mikron\json2tex\Domain\Entity
  */
 class StylePack
 {
     /**
-     * @var array
+     * @var string
      */
-    private $style;
+    private $tex;
 
-    /**
-     * @param string $json
-     */
-    public function __construct(string $json)
+    public function __construct(string $tex)
     {
-        $this->style = json_decode($json);
+        $this->tex = $tex;
     }
 
     /**
-     * @return array
+     * @return string
      */
-    public function getArray(): array
+    public function getTeX():string
     {
-        return $this->style;
+        return $this->tex;
+    }
+
+    /**
+     * @return string
+     */
+    function __toString():string
+    {
+        return $this->getTeX();
     }
 }

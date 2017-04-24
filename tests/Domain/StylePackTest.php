@@ -17,4 +17,26 @@ final class StylePackTest extends PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('Mikron\json2tex\Domain\Entity\StylePack', $object);
     }
+
+    /**
+     * @test
+     */
+    public function isTexReturnedCorrectly()
+    {
+        $string = '\renewCommand{A}{B}';
+        $tex = new StylePack($string);
+
+        $this->assertEquals($string, $tex->getTeX());
+    }
+
+    /**
+     * @test
+     */
+    public function isToStringCorrect()
+    {
+        $string = '\renewCommand{A}{B}';
+        $tex = new StylePack($string);
+
+        $this->assertEquals($string, $tex);
+    }
 }
