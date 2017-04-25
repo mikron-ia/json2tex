@@ -58,7 +58,8 @@ class Document
 
     private function getContent():string
     {
-        return "Text";
+        $exampleTree = new Tree('{}');
+        return $exampleTree->getTex();
     }
 
     public function getDocument():string

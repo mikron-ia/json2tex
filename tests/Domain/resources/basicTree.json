@@ -1,0 +1,23 @@
+{
+  "caption": "Skill tree",
+  "skills": {
+    "s1": {
+      "name": "Skill 1",
+      "rank": 1
+    },
+    "s2": {
+      "name": "Skill 2",
+      "rank": 2,
+      "requires": [
+        "s1"
+      ]
+    },
+    "s3": {
+      "name": "Skill 3",
+      "rank": 2,
+      "requires": [
+        "s1"
+      ]
+    }
+  }
+}

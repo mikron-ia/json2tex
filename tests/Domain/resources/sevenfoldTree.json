@@ -1,0 +1,52 @@
+{
+  "caption": "Skill tree",
+  "skills": {
+    "s1": {
+      "name": "Skill 1",
+      "rank": 1
+    },
+    "s2": {
+      "name": "Skill 2",
+      "rank": 2,
+      "requires": [
+        "s1"
+      ]
+    },
+    "s3": {
+      "name": "Skill 3",
+      "rank": 2,
+      "requires": [
+        "s1"
+      ]
+    },
+    "s4": {
+      "name": "Skill 4",
+      "rank": 3,
+      "requires": [
+        "s2"
+      ]
+    },
+    "s5": {
+      "name": "Skill 5",
+      "rank": 3,
+      "requires": [
+        "s3"
+      ]
+    },
+    "s6": {
+      "name": "Skill 6",
+      "rank": 4,
+      "requires": [
+        "s4",
+        "s5"
+      ]
+    },
+    "s7": {
+      "name": "Skill 7",
+      "rank": 2,
+      "requires": [
+        "s1"
+      ]
+    }
+  }
+}
