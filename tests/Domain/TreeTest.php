@@ -3,7 +3,6 @@
 namespace Mikron\json2tex\Tests;
 
 use Mikron\json2tex\Domain\Entity\Tree;
-use Mikron\json2tex\Domain\Exception\MalformedJsonException;
 use PHPUnit_Framework_TestCase;
 
 final class TreeTest extends PHPUnit_Framework_TestCase
