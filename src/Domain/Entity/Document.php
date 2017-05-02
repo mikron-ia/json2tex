@@ -56,10 +56,17 @@ class Document
         return $this->array;
     }
 
-    private function getContent():string
+    public function getContent():string
     {
-        $exampleTree = new Tree('{}');
-        return $exampleTree->getTex();
+        $trees = $this->array['trees'];
+        $treeTexes = [];
+
+        foreach($trees as $treeLabel => $tree) {
+            $treeObject = new Tree(json_encode($tree));
+            $treeTexes[$treeLabel] = $treeObject->getTex();
+        }
+
+        return implode('\n\n\n', $treeTexes);
     }
 
     public function getDocument():string

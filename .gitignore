@@ -1,3 +1,7 @@
+# IDEs
 .idea/
 nbproject/
+
+# Resources
 vendor/
+data/

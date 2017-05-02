@@ -2,7 +2,6 @@
 
 namespace Mikron\json2tex\Domain\Entity;
 
-
 use Mikron\json2tex\Domain\Exception\MalformedJsonException;
 
 class Tree
@@ -23,6 +22,11 @@ class Tree
     private $tex;
 
     /**
+     * @var Skill[]
+     */
+    private $skills;
+
+    /**
      * Tree constructor.
      * @param $json
      * @throws MalformedJsonException
@@ -37,16 +41,18 @@ class Tree
         }
     }
 
-    private function makeCompleteTree(string $interior)
+    private function makeCompleteTreeDrawing(string $interior)
     {
         $caption = $this->array['caption']??'';
 
-        $begin = <<<'TREESTART'
-\begin{figure}[h]
+        $begin = <<<TREESTART
+\\subsection{{$caption}}
+
+\\begin{figure}[h]
     \centering
-    \begin{tikzpicture}[scale=1,yscale=-1]
-    	\tikzset{
-    		skill/.style={rectangle, rounded corners, draw=black, text centered, text width=8em, minimum height=3em},
+    \\begin{tikzpicture}[scale=1,yscale=-1]
+    	\\tikzset{
+    		skill/.style={rectangle, rounded corners, draw=black, text centered, text width=5em, minimum height=3em},
     		arrowreq/.style={->, >=latex', shorten >=1pt, thick},
     	}
 
@@ -57,23 +63,55 @@ TREESTART;
 \\end{tikzpicture}
     
     \\caption{{$caption}}
+    
 \\end{figure}
 TREEEND;
 
-        return $begin . $interior . $end;
+        return $begin . $interior . $end . PHP_EOL . PHP_EOL . implode(PHP_EOL . PHP_EOL, $this->descriptions());
     }
 
-    private function makeTreeInterior()
+    /**
+     * @return string[]
+     */
+    private function descriptions():array
     {
-        /* Init */
-        $content = '';
-        $nodesByRank = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0];
-        $nodesByRankPosition = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0];
-        $unitByRank = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0];
-        $nodes = [];
-        $nodesByLabel = [];
+        $descriptions = [];
 
-        foreach ($this->array['skills'] as $skill => $unorderedNode) {
+        $aura = $this->array['aura'] ? str_replace('\n', PHP_EOL, $this->array['aura']) : '?';
+        $skills = $this->array['skills']??[];
+
+        $nodesByRank = $this->orderNotesByRank();
+
+        foreach ($skills as $skill) {
+            $label = $skill['name'];
+            $rank = $skill['rank'];
+            $insides = str_replace('\n', PHP_EOL, $skill['description']);
+
+            $description = <<<DESCRIPTION
+\\subsubsection{Aura}
+$aura
+
+\\subsubsection{Powers}
+
+\\power{{$label}}
+\\textit{Rank {$rank}}
+ 
+$insides
+
+DESCRIPTION;
+
+            $descriptions[] = $description;
+        }
+
+        return $descriptions;
+    }
+
+    private function orderNotesByRank()
+    {
+        $skills = $this->array['skills']??[];
+        $nodesByRank = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0];
+
+        foreach ($skills as $skill => $unorderedNode) {
             $node = $unorderedNode;
             $node['label'] = $skill;
             $nodes[] = $node;
@@ -84,15 +122,39 @@ TREEEND;
             $nodesByRank[$unorderedNode['rank']] += 1;
         }
 
+        return $nodesByRank;
+    }
+
+    private function makeTreeInterior()
+    {
+        /* Init */
+        $content = '';
+        $nodesByRankPosition = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0];
+        $unitByRank = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0];
+        $nodes = [];
+        $nodesByLabel = [];
+
+        $skills = $this->array['skills']??[];
+
+        $nodesByRank = $this->orderNotesByRank();
+
+        foreach ($skills as $skill => $unorderedNode) {
+            $node = $unorderedNode;
+            $node['label'] = $skill;
+            $nodes[] = $node;
+        }
+
         /* Calculate tree width */
-        $width = max($nodesByRank) * 4;
+        $width = max($nodesByRank) * 3;
 
         for ($i = 1; $i <= 5; $i++) {
-            $unitByRank[$i] = ceil($width / ($nodesByRank[$i] + 1)) * 4;
+            $unitByRank[$i] = ceil($width / ($nodesByRank[$i] + 1)) * 3;
             $nodesByRankPosition[$i] = 0;
         }
 
         /* Draw scale on the left */
+        $scale = '';
+        $content .= $scale;
 
         /* Draw nodes */
 
@@ -119,7 +181,8 @@ TREEEND;
             if (!empty($node['requires'])) {
                 foreach ($node['requires'] as $requirementLabel) {
                     $requiredNode = $nodesByLabel[$requirementLabel];
-                    $meanY = ceil(($requiredNode['y'] + $node['y']) / 2);
+                    //$meanY = ceil(($requiredNode['y'] + $node['y']) / 2);
+                    $meanY = ceil($requiredNode['y'] + 1);
                     $content .= '\draw[arrowreq] ('
                         . $requiredNode['label'] . '.south) -- ('
                         . $requiredNode['x'] . ', ' . $meanY . ') -- ('
@@ -139,7 +202,7 @@ TREEEND;
     {
         if (empty($this->tex)) {
             $interior = $this->makeTreeInterior();
-            $this->tex = $this->makeCompleteTree($interior);
+            $this->tex = $this->makeCompleteTreeDrawing($interior);
         }
 
         return $this->tex;

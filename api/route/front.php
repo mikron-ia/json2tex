@@ -8,3 +8,10 @@ $app->get('/tex/', function (Silex\Application $app) {
     $document = new \Mikron\json2tex\Domain\Entity\Document('[]');
     return $document->getDocument();
 });
+
+
+$app->get('/from-file/{file}/', function (Silex\Application $app, $file) {
+    $json = file_get_contents(__DIR__ . '/../../data/' . $file . '.json');
+    $document = new \Mikron\json2tex\Domain\Entity\Document($json);
+    return $document->getContent();
+});
