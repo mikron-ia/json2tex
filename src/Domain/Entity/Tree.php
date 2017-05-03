@@ -44,6 +44,10 @@ class Tree
     private function makeCompleteTreeDrawing(string $interior)
     {
         $caption = $this->array['caption']??'';
+        $aura = $this->array['aura'] ?
+            '\\subsubsection{Aura}' . PHP_EOL . PHP_EOL .
+            str_replace('\n', PHP_EOL, implode(PHP_EOL . PHP_EOL, $this->array['aura'])) :
+            '';
 
         $begin = <<<TREESTART
 \\subsection{{$caption}}
@@ -65,9 +69,14 @@ TREESTART;
     \\caption{{$caption}}
     
 \\end{figure}
+
+$aura
+
+\\subsubsection{Powers}
+
 TREEEND;
 
-        return $begin . $interior . $end . PHP_EOL . PHP_EOL . implode(PHP_EOL . PHP_EOL, $this->descriptions());
+        return $begin . $interior . $end . implode(PHP_EOL . PHP_EOL, $this->descriptions());
     }
 
     /**
@@ -77,27 +86,31 @@ TREEEND;
     {
         $descriptions = [];
 
-        $aura = $this->array['aura'] ? str_replace('\n', PHP_EOL, $this->array['aura']) : '?';
-        $skills = $this->array['skills']??[];
 
-        $nodesByRank = $this->orderNotesByRank();
+        $skills = $this->array['skills']??[];
 
         foreach ($skills as $skill) {
             $label = $skill['name'];
             $rank = $skill['rank'];
-            $insides = str_replace('\n', PHP_EOL, $skill['description']);
+
+            if (isset($skill['description'])) {
+                $insides = str_replace('\n', PHP_EOL, implode(PHP_EOL . PHP_EOL, $skill['description']));
+            } elseif (isset($skill['file'])) {
+                if (file_exists($skill['file'])) {
+                    $insides = file_get_contents($skill['file']);
+                } else {
+                    $insides = "[file not found]";
+                }
+            } else {
+                $insides = "[no data found]";
+            }
 
             $description = <<<DESCRIPTION
-\\subsubsection{Aura}
-$aura
-
-\\subsubsection{Powers}
 
 \\power{{$label}}
 \\textit{Rank {$rank}}
- 
-$insides
 
+$insides
 DESCRIPTION;
 
             $descriptions[] = $description;
