@@ -48,9 +48,14 @@ class Tree
             '\\subsubsection{Aura}' . PHP_EOL . PHP_EOL .
             str_replace('\n', PHP_EOL, implode(PHP_EOL . PHP_EOL, $this->array['aura'])) :
             '';
+        $description = $this->array['description'] ?
+            str_replace('\n', PHP_EOL, implode(PHP_EOL . PHP_EOL, $this->array['description'])) :
+            '';
 
         $begin = <<<TREESTART
 \\subsection{{$caption}}
+
+$description
 
 \\begin{figure}[h]
     \centering
