@@ -44,11 +44,11 @@ class Tree
     private function makeCompleteTreeDrawing(string $interior)
     {
         $caption = $this->array['caption']??'';
-        $aura = $this->array['aura'] ?
+        $aura = isset($this->array['aura']) ?
             '\\subsubsection{Aura}' . PHP_EOL . PHP_EOL .
             str_replace('\n', PHP_EOL, implode(PHP_EOL . PHP_EOL, $this->array['aura'])) :
             '';
-        $description = $this->array['description'] ?
+        $description = isset($this->array['description']) ?
             str_replace('\n', PHP_EOL, implode(PHP_EOL . PHP_EOL, $this->array['description'])) :
             '';
 
@@ -90,7 +90,6 @@ TREEEND;
     private function descriptions():array
     {
         $descriptions = [];
-
 
         $skills = $this->array['skills']??[];
 
@@ -182,7 +181,7 @@ DESCRIPTION;
             $unitX = ceil($unitByRank[$nodes[$i]['rank']] / 2);
 
             $nodes[$i]['x'] = $unitX * ($nodesByRankPosition[$nodes[$i]['rank']] + 1);
-            $nodes[$i]['y'] = ($nodes[$i]['rank'] - 1) * 2;
+            $nodes[$i]['y'] = ($nodes[$i]['rank'] - 1) * 3;
 
             $nodesByRankPosition[$nodes[$i]['rank']]++;
 
