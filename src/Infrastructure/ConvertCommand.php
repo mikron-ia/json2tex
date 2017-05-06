@@ -26,7 +26,7 @@ class ConvertCommand extends Command
             )
             ->addArgument(
                 'target',
-                InputArgument::OPTIONAL,
+                InputArgument::REQUIRED,
                 'Target TeX file'
             );
     }
@@ -36,9 +36,11 @@ class ConvertCommand extends Command
         $source = $input->getArgument('source');
         $target = $input->getArgument('target');
 
-        $json = file_get_contents(__DIR__ . '/' . $source);
+        $json = file_get_contents($source);
         $document = new Document($json);
 
-        $output->writeln($document->getContent());
+        file_put_contents($target, $document->getContent());
+
+        $output->writeln("Done" . PHP_EOL);
     }
 }
