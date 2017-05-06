@@ -37,10 +37,14 @@ class ConvertCommand extends Command
         $target = $input->getArgument('target');
 
         $json = file_get_contents($source);
-        $document = new Document($json);
 
-        file_put_contents($target, $document->getContent());
-
-        $output->writeln("Done" . PHP_EOL);
+        if (!$json) {
+            $output->writeln('Unable to read source file.');
+        } else {
+            $document = new Document($json);
+            if (file_put_contents($target, $document->getContent()) === false) {
+                $output->writeln('Unable to write target file.');
+            }
+        }
     }
 }
