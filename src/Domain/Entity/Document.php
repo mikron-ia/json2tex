@@ -61,12 +61,12 @@ class Document
         $trees = $this->array['trees'];
         $treeTexes = [];
 
-        foreach($trees as $treeLabel => $tree) {
+        foreach ($trees as $treeLabel => $tree) {
             $treeObject = new Tree(json_encode($tree));
             $treeTexes[$treeLabel] = $treeObject->getTex();
         }
 
-        return implode('\n\n\n', $treeTexes);
+        return implode(PHP_EOL . PHP_EOL . PHP_EOL, $treeTexes);
     }
 
     public function getDocument():string
