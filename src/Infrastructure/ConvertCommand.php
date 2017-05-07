@@ -28,6 +28,11 @@ class ConvertCommand extends Command
                 'target',
                 InputArgument::REQUIRED,
                 'Target TeX file'
+            )
+            ->addArgument(
+                'filePath',
+                InputArgument::OPTIONAL,
+                'Path to auxiliary files'
             );
     }
 
@@ -35,13 +40,14 @@ class ConvertCommand extends Command
     {
         $source = $input->getArgument('source');
         $target = $input->getArgument('target');
+        $path = $input->getArgument('filePath');
 
         $json = file_get_contents($source);
 
         if (!$json) {
             $output->writeln('Unable to read source file.');
         } else {
-            $document = new Document($json);
+            $document = new Document($json, $path);
             if (file_put_contents($target, $document->getContent()) === false) {
                 $output->writeln('Unable to write target file.');
             }

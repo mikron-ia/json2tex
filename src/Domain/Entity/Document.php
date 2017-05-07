@@ -28,16 +28,26 @@ class Document
      */
     private $header = '';
 
+    /**
+     * @var string
+     */
     private $footer = '';
 
     /**
-     * Document constructor.
-     * @param $json string
+     * @var string
      */
-    public function __construct($json)
+    private $path;
+
+    /**
+     * Document constructor.
+     * @param string $json
+     * @param string $path
+     */
+    public function __construct($json, $path = "")
     {
         $this->json = $json;
         $this->array = json_decode($this->json, true);
+        $this->path = $path;
     }
 
     /**
@@ -62,7 +72,7 @@ class Document
         $treeTexes = [];
 
         foreach ($trees as $treeLabel => $tree) {
-            $treeObject = new Tree(json_encode($tree));
+            $treeObject = new Tree(json_encode($tree), $this->path);
             $treeTexes[$treeLabel] = $treeObject->getTex();
         }
 

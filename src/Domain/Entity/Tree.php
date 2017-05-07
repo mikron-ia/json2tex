@@ -25,13 +25,15 @@ class Tree
      * @var Skill[]
      */
     private $skills;
+    private $path;
 
     /**
      * Tree constructor.
      * @param $json
+     * @param $path
      * @throws MalformedJsonException
      */
-    public function __construct($json)
+    public function __construct($json, $path = "")
     {
         $this->json = $json;
         $this->array = json_decode($json, true);
@@ -39,6 +41,8 @@ class Tree
         if ($this->array === null) {
             throw new MalformedJsonException('Wrong JSON format');
         }
+
+        $this->path = $path;
     }
 
     private function makeCompleteTreeDrawing(string $interior)
@@ -100,8 +104,9 @@ TREEEND;
             if (isset($skill['description'])) {
                 $insides = str_replace('\n', PHP_EOL, implode(PHP_EOL . PHP_EOL, $skill['description']));
             } elseif (isset($skill['file'])) {
-                if (file_exists($skill['file'])) {
-                    $insides = file_get_contents($skill['file']);
+                $path = $this->path . $skill['file'];
+                if (file_exists($path)) {
+                    $insides = file_get_contents($path);
                 } else {
                     $insides = "[file not found]";
                 }
@@ -162,10 +167,16 @@ DESCRIPTION;
         }
 
         /* Calculate tree width */
-        $width = max($nodesByRank) * 3;
+        $width = max($nodesByRank);
 
         for ($i = 1; $i <= 5; $i++) {
-            $unitByRank[$i] = ceil($width / ($nodesByRank[$i] + 1)) * 3;
+            //$unitByRank[$i] = ceil($width * 3 / ($nodesByRank[$i] + 1)) * 3;
+            if ($nodesByRank[$i] > 0) {
+                $unitByRank[$i] = ceil($width / $nodesByRank[$i]);
+            } else {
+                $unitByRank[$i] = null;
+            }
+
             $nodesByRankPosition[$i] = 0;
         }
 
@@ -178,14 +189,16 @@ DESCRIPTION;
         $nodeCount = count($nodes);
 
         for ($i = 0; $i < $nodeCount; $i++) {
-            $unitX = ceil($unitByRank[$nodes[$i]['rank']] / 2);
+            if ($unitByRank[$nodes[$i]['rank']]) {
+                $unitX = $unitByRank[$nodes[$i]['rank']] * 4;
 
-            $nodes[$i]['x'] = $unitX * ($nodesByRankPosition[$nodes[$i]['rank']] + 1);
-            $nodes[$i]['y'] = ($nodes[$i]['rank'] - 1) * 3;
+                $nodes[$i]['x'] = $unitX * $nodesByRankPosition[$nodes[$i]['rank']];
+                $nodes[$i]['y'] = ($nodes[$i]['rank'] - 1) * 3;
 
-            $nodesByRankPosition[$nodes[$i]['rank']]++;
+                $nodesByRankPosition[$nodes[$i]['rank']]++;
 
-            $nodesByLabel[$nodes[$i]['label']] = $nodes[$i];
+                $nodesByLabel[$nodes[$i]['label']] = $nodes[$i];
+            }
         }
 
         foreach ($nodes as $node) {
