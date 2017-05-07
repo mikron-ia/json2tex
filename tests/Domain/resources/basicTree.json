@@ -1,5 +1,8 @@
 {
-  "caption": "Skill tree",
+  "caption": "Skill tree - simple",
+  "description": [
+    "Description paragraph 1"
+  ],
   "skills": {
     "s1": {
       "name": "Skill 1",

@@ -1,13 +1,27 @@
 {
-  "caption": "Skill tree",
+  "caption": "Skill tree - complex",
+  "description": [
+    "Description paragraph 1",
+    "Description paragraph 2"
+  ],
+  "aura": [],
+  "mastery": [],
   "skills": {
     "s1": {
       "name": "Skill 1",
-      "rank": 1
+      "rank": 1,
+      "description": [
+        "Description paragraph 1",
+        "Description paragraph 2"
+      ]
     },
     "s2": {
       "name": "Skill 2",
       "rank": 2,
+      "description": [
+        "Description paragraph 1",
+        "Description paragraph 2"
+      ],
       "requires": [
         "s1"
       ]
@@ -15,6 +29,10 @@
     "s3": {
       "name": "Skill 3",
       "rank": 2,
+      "description": [
+        "Description paragraph 1",
+        "Description paragraph 2"
+      ],
       "requires": [
         "s1"
       ]
