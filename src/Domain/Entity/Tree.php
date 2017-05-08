@@ -62,10 +62,10 @@ class Tree
 $description
 
 \\begin{figure}[h]
-    \centering
+    \\centering
     \\begin{tikzpicture}[scale=1,yscale=-1]
     	\\tikzset{
-    		skill/.style={rectangle, rounded corners, draw=black, text centered, text width=5em, minimum height=3em},
+    		skill/.style={rectangle, rounded corners, draw=black, text centered, text width=7em, minimum height=4em},
     		arrowreq/.style={->, >=latex', shorten >=1pt, thick},
     	}
 
