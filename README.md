@@ -15,13 +15,15 @@ Desired functionalities:
 - Ability to create and insert graphs based on JSON-provided hierarchy - *done but can be improved*
 
 ## Installation guide
-1. Clone the repo to desired directory
-1. Run `composer install`
+1. Clone the repo to desired directory - this does not have to be under any web server
+1. Run `composer install --no-dev`
 1. Intended entry point is via `console/convert`
 
 ## Using the tool
-Tool can be called via `console/convert convert:convert {full path to source file} {full path to target file} [{full path to additional resources}]`. Source file must be a valid JSON, target file will be a TeX file. Additional resources must be valid TeX files, although they can have any names. 
+Tool can be called via `console/convert convert:convert {full path to source file} {full path to target file} [{full path to additional resources}]`. Source file must be a valid JSON, target file will be a TeX file. Additional resources must be valid TeX files, although they can have any names.
+ 
+Run `php console/convert --help` for details.
 
 ## Architecture
 
-Originally based on [RPG Silex boilerplate](/mikron-ia/rpg-boilerplate-silex). Intended for non-interactive use.
+Originally based on [RPG Silex boilerplate](/mikron-ia/rpg-boilerplate-silex). Intended for command-line use.
