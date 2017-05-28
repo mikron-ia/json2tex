@@ -25,7 +25,21 @@ class Tree
      * @var Skill[]
      */
     private $skills;
+
+    /**
+     * @var string
+     */
     private $path;
+
+    /**
+     * @var string
+     */
+    private $figureBegin;
+
+    /**
+     * @var string
+     */
+    private $figureEnd;
 
     /**
      * Tree constructor.
@@ -43,6 +57,14 @@ class Tree
         }
 
         $this->path = $path;
+
+        $this->figureBegin = "\t\\begin{tikzpicture}[scale=1,yscale=-1]
+\t\t\\tikzset{
+\t\t\tskill/.style={rectangle, rounded corners, draw=black, text centered, text width=7em, minimum height=4em},
+\t\t\tarrowreq/.style={->, >=latex', shorten >=1pt, thick}
+\t\t}";
+
+        $this->figureEnd = "\t\\end{tikzpicture}";
     }
 
     private function makeCompleteTreeDrawing(string $interior)
@@ -61,22 +83,15 @@ class Tree
 
 $description
 
-\\begin{figure}[h]
-    \\centering
-    \\begin{tikzpicture}[scale=1,yscale=-1]
-    	\\tikzset{
-    		skill/.style={rectangle, rounded corners, draw=black, text centered, text width=7em, minimum height=4em},
-    		arrowreq/.style={->, >=latex', shorten >=1pt, thick},
-    	}
+\\begin{figure}[ht]
+\t\\centering
+$this->figureBegin
 
 TREESTART;
 
         $end = <<<TREEEND
-        
-\\end{tikzpicture}
-    
-    \\caption{{$caption}}
-    
+$this->figureEnd    
+\t\\caption{{$caption}}    
 \\end{figure}
 
 $aura
@@ -202,7 +217,7 @@ DESCRIPTION;
         }
 
         foreach ($nodes as $node) {
-            $content .= '\node[skill] at (' . $node['x'] . ', ' . $node['y'] . ') (' . $node['label'] . ') {' . $node['name'] . '};' . PHP_EOL;
+            $content .= "\t\t\t" . '\node[skill] at (' . $node['x'] . ', ' . $node['y'] . ') (' . $node['label'] . ') {' . $node['name'] . '};' . PHP_EOL;
         }
 
         /* Draw lines */
@@ -213,7 +228,7 @@ DESCRIPTION;
                     $requiredNode = $nodesByLabel[$requirementLabel];
                     //$meanY = ceil(($requiredNode['y'] + $node['y']) / 2);
                     $meanY = ceil($requiredNode['y'] + 1);
-                    $content .= '\draw[arrowreq] ('
+                    $content .= "\t\t\t" .'\draw[arrowreq] ('
                         . $requiredNode['label'] . '.south) -- ('
                         . $requiredNode['x'] . ', ' . $meanY . ') -- ('
                         . $node['x'] . ',' . $meanY . ') -- ('
