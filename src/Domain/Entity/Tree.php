@@ -60,7 +60,7 @@ class Tree
 
         $this->figureBegin = "\t\\begin{tikzpicture}[scale=1,yscale=-1]
 \t\t\\tikzset{
-\t\t\tskill/.style={rectangle, rounded corners, draw=black, text centered, text width=7em, minimum height=4em},
+\t\t\tskill/.style={rectangle, rounded corners, draw=black, text centered, text width=5em, minimum height=4em},
 \t\t\tarrowreq/.style={->, >=latex', shorten >=1pt, thick}
 \t\t}";
 
@@ -182,12 +182,16 @@ DESCRIPTION;
         }
 
         /* Calculate tree width */
-        $width = max($nodesByRank);
+
+        if(isset($this->array['width'])) {
+            $width = $this->array['width'];
+        } else {
+            $width = max($nodesByRank);
+        }
 
         for ($i = 1; $i <= 5; $i++) {
-            //$unitByRank[$i] = ceil($width * 3 / ($nodesByRank[$i] + 1)) * 3;
             if ($nodesByRank[$i] > 0) {
-                $unitByRank[$i] = ceil($width / $nodesByRank[$i]);
+                $unitByRank[$i] = ceil($width / $nodesByRank[$i])+2;
             } else {
                 $unitByRank[$i] = null;
             }
@@ -205,9 +209,14 @@ DESCRIPTION;
 
         for ($i = 0; $i < $nodeCount; $i++) {
             if ($unitByRank[$nodes[$i]['rank']]) {
-                $unitX = $unitByRank[$nodes[$i]['rank']] * 4;
+                //$unitX = $unitByRank[$nodes[$i]['rank']] * 1;
+                $unitX = ceil(20 / $width);
 
-                $nodes[$i]['x'] = $unitX * $nodesByRankPosition[$nodes[$i]['rank']];
+                if (!isset($nodes[$i]['position'])) {
+                    $nodes[$i]['position'] = $nodesByRankPosition[$nodes[$i]['rank']];
+                }
+
+                $nodes[$i]['x'] = $unitX * $nodes[$i]['position'];
                 $nodes[$i]['y'] = ($nodes[$i]['rank'] - 1) * 3;
 
                 $nodesByRankPosition[$nodes[$i]['rank']]++;
@@ -226,12 +235,8 @@ DESCRIPTION;
             if (!empty($node['requires'])) {
                 foreach ($node['requires'] as $requirementLabel) {
                     $requiredNode = $nodesByLabel[$requirementLabel];
-                    //$meanY = ceil(($requiredNode['y'] + $node['y']) / 2);
-                    $meanY = ceil($requiredNode['y'] + 1);
-                    $content .= "\t\t\t" .'\draw[arrowreq] ('
+                    $content .= "\t\t\t" . '\draw[arrowreq] ('
                         . $requiredNode['label'] . '.south) -- ('
-                        . $requiredNode['x'] . ', ' . $meanY . ') -- ('
-                        . $node['x'] . ',' . $meanY . ') -- ('
                         . $node['label'] . '.north);'
                         . PHP_EOL;
                 }
