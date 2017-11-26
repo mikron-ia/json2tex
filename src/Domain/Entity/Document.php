@@ -66,7 +66,7 @@ class Document
         return $this->array;
     }
 
-    public function getContent():string
+    public function getContent(): string
     {
         $trees = $this->array['trees'];
         $treeTexes = [];
@@ -79,7 +79,7 @@ class Document
         return implode(PHP_EOL . PHP_EOL . PHP_EOL, $treeTexes);
     }
 
-    public function getDocument():string
+    public function getDocument(): string
     {
         if (!$this->document) {
             $top = '\documentclass[a4paper,final,12pt]{memoir}

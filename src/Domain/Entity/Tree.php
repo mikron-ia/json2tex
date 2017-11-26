@@ -42,6 +42,11 @@ class Tree
     private $figureEnd;
 
     /**
+     * @var bool
+     */
+    private $separateDescriptionsMode = false;
+
+    /**
      * Tree constructor.
      * @param $json
      * @param $path
@@ -69,7 +74,7 @@ class Tree
 
     private function makeCompleteTreeDrawing(string $interior)
     {
-        $caption = $this->array['caption']??'';
+        $caption = $this->array['caption'] ?? '';
         $aura = isset($this->array['aura']) ?
             '\\subsubsection{Aura}' . PHP_EOL . PHP_EOL .
             str_replace('\n', PHP_EOL, implode(PHP_EOL . PHP_EOL, $this->array['aura'])) :
@@ -106,30 +111,61 @@ TREEEND;
     /**
      * @return string[]
      */
-    private function descriptions():array
+    private function descriptions(): array
     {
         $descriptions = [];
 
-        $skills = $this->array['skills']??[];
+        if (isset($this->array['descriptions'])) {
+            $skills = $this->array['descriptions'] ?? [];
 
-        foreach ($skills as $skill) {
-            $label = $skill['name'];
-            $rank = $skill['rank'];
+            foreach ($skills as $skill) {
+                $label = $skill['name'];
 
-            if (isset($skill['description'])) {
-                $insides = str_replace('\n', PHP_EOL, implode(PHP_EOL . PHP_EOL, $skill['description']));
-            } elseif (isset($skill['file'])) {
-                $path = $this->path . $skill['file'];
-                if (file_exists($path)) {
-                    $insides = file_get_contents($path);
+                if (isset($skill['description'])) {
+                    $insides = str_replace('\n', PHP_EOL, implode(PHP_EOL . PHP_EOL, $skill['description']));
+                } elseif (isset($skill['file'])) {
+                    $path = $this->path . $skill['file'];
+                    if (file_exists($path)) {
+                        $insides = file_get_contents($path);
+                    } else {
+                        $insides = "[file not found]";
+                    }
                 } else {
-                    $insides = "[file not found]";
+                    $insides = "[no data found]";
                 }
-            } else {
-                $insides = "[no data found]";
-            }
 
-            $description = <<<DESCRIPTION
+                $description = <<<DESCRIPTION
+
+\\power{{$label}}
+
+$insides
+DESCRIPTION;
+
+                $descriptions[$label] = $description;
+
+                ksort($descriptions);
+            }
+        } else {
+            $skills = $this->array['skills'] ?? [];
+
+            foreach ($skills as $skill) {
+                $label = $skill['name'];
+                $rank = $skill['rank'];
+
+                if (isset($skill['description'])) {
+                    $insides = str_replace('\n', PHP_EOL, implode(PHP_EOL . PHP_EOL, $skill['description']));
+                } elseif (isset($skill['file'])) {
+                    $path = $this->path . $skill['file'];
+                    if (file_exists($path)) {
+                        $insides = file_get_contents($path);
+                    } else {
+                        $insides = "[file not found]";
+                    }
+                } else {
+                    $insides = "[no data found]";
+                }
+
+                $description = <<<DESCRIPTION
 
 \\power{{$label}}
 \\textit{Rank {$rank}}
@@ -137,7 +173,8 @@ TREEEND;
 $insides
 DESCRIPTION;
 
-            $descriptions[] = $description;
+                $descriptions[] = $description;
+            }
         }
 
         return $descriptions;
@@ -145,7 +182,7 @@ DESCRIPTION;
 
     private function orderNotesByRank()
     {
-        $skills = $this->array['skills']??[];
+        $skills = $this->array['skills'] ?? [];
         $nodesByRank = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0];
 
         foreach ($skills as $skill => $unorderedNode) {
@@ -171,7 +208,7 @@ DESCRIPTION;
         $nodes = [];
         $nodesByLabel = [];
 
-        $skills = $this->array['skills']??[];
+        $skills = $this->array['skills'] ?? [];
 
         $nodesByRank = $this->orderNotesByRank();
 
@@ -183,7 +220,7 @@ DESCRIPTION;
 
         /* Calculate tree width */
 
-        if(isset($this->array['width'])) {
+        if (isset($this->array['width'])) {
             $width = $this->array['width'];
         } else {
             $width = max($nodesByRank);
@@ -191,7 +228,7 @@ DESCRIPTION;
 
         for ($i = 1; $i <= 5; $i++) {
             if ($nodesByRank[$i] > 0) {
-                $unitByRank[$i] = ceil($width / $nodesByRank[$i])+2;
+                $unitByRank[$i] = ceil($width / $nodesByRank[$i]) + 2;
             } else {
                 $unitByRank[$i] = null;
             }
