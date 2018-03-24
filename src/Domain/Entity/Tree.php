@@ -42,11 +42,6 @@ class Tree
     private $figureEnd;
 
     /**
-     * @var bool
-     */
-    private $separateDescriptionsMode = false;
-
-    /**
      * Tree constructor.
      * @param $json
      * @param $path
@@ -199,6 +194,10 @@ DESCRIPTION;
         return $nodesByRank;
     }
 
+    /**
+     * @return string
+     * @throws \Exception
+     */
     private function makeTreeInterior()
     {
         /* Init */
@@ -271,6 +270,9 @@ DESCRIPTION;
         foreach ($nodes as $node) {
             if (!empty($node['requires'])) {
                 foreach ($node['requires'] as $requirementLabel) {
+                    if (empty($nodesByLabel[$requirementLabel])) {
+                        throw new \Exception("Node $requirementLabel not found");
+                    }
                     $requiredNode = $nodesByLabel[$requirementLabel];
                     $content .= "\t\t\t" . '\draw[arrowreq] ('
                         . $requiredNode['label'] . '.south) -- ('
@@ -284,6 +286,7 @@ DESCRIPTION;
 
     /**
      * @return string
+     * @throws \Exception
      */
     public function getTex()
     {
