@@ -245,7 +245,6 @@ DESCRIPTION;
 
         for ($i = 0; $i < $nodeCount; $i++) {
             if ($unitByRank[$nodes[$i]['rank']]) {
-                //$unitX = $unitByRank[$nodes[$i]['rank']] * 1;
                 $unitX = ceil(20 / $width);
 
                 if (!isset($nodes[$i]['position'])) {

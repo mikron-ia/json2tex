@@ -10,11 +10,6 @@ class Skill
     private $name;
 
     /**
-     * @var string
-     */
-    private $description;
-
-    /**
      * @var int
      */
     private $rank;

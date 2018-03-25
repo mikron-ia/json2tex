@@ -23,16 +23,16 @@ class StylePack
     /**
      * @return string
      */
-    public function getTeX():string
+    function __toString(): string
     {
-        return $this->tex;
+        return $this->getTeX();
     }
 
     /**
      * @return string
      */
-    function __toString():string
+    public function getTeX(): string
     {
-        return $this->getTeX();
+        return $this->tex;
     }
 }

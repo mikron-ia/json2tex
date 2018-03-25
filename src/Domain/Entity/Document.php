@@ -66,19 +66,6 @@ class Document
         return $this->array;
     }
 
-    public function getContent(): string
-    {
-        $trees = $this->array['trees'];
-        $treeTexes = [];
-
-        foreach ($trees as $treeLabel => $tree) {
-            $treeObject = new Tree(json_encode($tree), $this->path);
-            $treeTexes[$treeLabel] = $treeObject->getTex();
-        }
-
-        return implode(PHP_EOL . PHP_EOL . PHP_EOL, $treeTexes);
-    }
-
     public function getDocument(): string
     {
         if (!$this->document) {
@@ -101,5 +88,18 @@ class Document
         }
 
         return $this->document;
+    }
+
+    public function getContent(): string
+    {
+        $trees = $this->array['trees'];
+        $treeTexes = [];
+
+        foreach ($trees as $treeLabel => $tree) {
+            $treeObject = new Tree(json_encode($tree), $this->path);
+            $treeTexes[$treeLabel] = $treeObject->getTex();
+        }
+
+        return implode(PHP_EOL . PHP_EOL . PHP_EOL, $treeTexes);
     }
 }
