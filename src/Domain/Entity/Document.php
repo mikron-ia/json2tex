@@ -2,6 +2,8 @@
 
 namespace Mikron\json2tex\Domain\Entity;
 
+use Mikron\json2tex\Domain\Exception\MalformedJsonException;
+
 /**
  * Class Document
  * @package Mikron\json2tex\Domain\Entity
@@ -66,6 +68,10 @@ class Document
         return $this->array;
     }
 
+    /**
+     * @return string
+     * @throws MalformedJsonException
+     */
     public function getDocument(): string
     {
         if (!$this->document) {
@@ -90,10 +96,19 @@ class Document
         return $this->document;
     }
 
+    /**
+     * @return string
+     * @throws MalformedJsonException
+     * @throws \Exception
+     */
     public function getContent(): string
     {
         $trees = $this->array['trees'];
         $treeTexes = [];
+
+        if ($trees === null) {
+            throw new MalformedJsonException('Invalid tree structure. Cannot generate document.');
+        }
 
         foreach ($trees as $treeLabel => $tree) {
             $treeObject = new Tree(json_encode($tree), $this->path);

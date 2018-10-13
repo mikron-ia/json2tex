@@ -36,6 +36,12 @@ class ConvertCommand extends Command
             );
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|null|void
+     * @throws \Mikron\json2tex\Domain\Exception\MalformedJsonException
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $source = $input->getArgument('source');
