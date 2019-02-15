@@ -26,6 +26,11 @@ class Advantage
     /**
      * @var string
      */
+    private $label;
+
+    /**
+     * @var string
+     */
     private $tex;
 
     /**
@@ -81,7 +86,7 @@ class Advantage
 
     private function makeTraitName(array $array): string
     {
-        if (!isset($array['name'])) {
+        if ( ! isset($array['name'])) {
             throw new MissingComponentException('Trait must have a name.');
         }
         return $array['name'] . ' [' . ($array['cost'] ?? '0') . ']';
@@ -119,12 +124,16 @@ class Advantage
 
     private function makeTraitRequirements(array $array): string
     {
-        return implode(', ', $array['requirements'] ?? []);
+        if (isset($array['requirements'])) {
+            return '\textit{' . implode(', ', $array['requirements']) . '}';
+        } else {
+            return '';
+        }
     }
 
     private function makeTraitContent(array $array): string
     {
-        if (!isset($array['content'])) {
+        if ( ! isset($array['content'])) {
             throw new MissingComponentException('Trait must have some content.');
         }
         return $array['content'];
@@ -155,18 +164,36 @@ class Advantage
         return $this->makeCommand('Content');
     }
 
-    private function dressStringInCommand(string $command, string $content): string
+    private function makeCommandLabel(): string
     {
-        return "\\newcommand{$command}{{$content}}";
+        return $this->makeCommand('Label');
     }
 
-    private function makeEntry(): string
+    private function makeCommandPackLite(): string
+    {
+        return $this->makeCommand('PackLite');
+    }
+
+    private function dressStringInCommand(string $command, string $content): string
+    {
+        return "\\newcommand{{$command}}{{$content}}";
+    }
+
+    private function makeEntryFull(): string
     {
         $subtitle = $this->makeCommandLimit(); // @todo Add racial/culture/class limit, creation only tag
 
-        return '\\subsubsection{' . $this->makeCommandName() . '}' . PHP_EOL
+        return '\subsubsection{' . $this->makeCommandName() . '}\label{' . $this->makeCommandLabel() . '}' . PHP_EOL
             . $subtitle . PHP_EOL
             . PHP_EOL
+            . $this->makeCommandRequirements() . PHP_EOL
+            . PHP_EOL
+            . $this->makeCommandContent();
+    }
+
+    private function makeEntryLite(): string
+    {
+        return '\subsubsection{' . $this->makeCommandName() . '}' . PHP_EOL
             . $this->makeCommandRequirements() . PHP_EOL
             . PHP_EOL
             . $this->makeCommandContent();
@@ -183,7 +210,9 @@ class Advantage
             $this->dressStringInCommand($this->makeCommandName(), $this->makeTraitName($array)),
             $this->dressStringInCommand($this->makeCommandLimit(), $this->makeTraitLimit($array)),
             $this->dressStringInCommand($this->makeCommandRequirements(), $this->makeTraitRequirements($array)),
-            $this->dressStringInCommand($this->makeCommandContent(), $this->makeTraitContent($array))
+            $this->dressStringInCommand($this->makeCommandContent(), $this->makeTraitContent($array)),
+            PHP_EOL,
+            $this->dressStringInCommand($this->makeCommandPackLite(), $this->makeEntryLite())
         ]);
     }
 
@@ -193,7 +222,7 @@ class Advantage
     public function getIndex(): string
     {
         if (empty($this->index)) {
-            $this->index = $this->makeEntry();
+            $this->index = $this->makeEntryFull();
         }
 
         return $this->index;
