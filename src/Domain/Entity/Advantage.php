@@ -88,34 +88,33 @@ class Advantage
     }
 
     /**
-     * @param $limits
-     * @return string[]
-     */
-    private function makeLimitPageRecord($limits): array
-    {
-        $limitList = [];
-        foreach ($limits as $limit) {
-            $base = $limit['value'] . ' only';
-            if ($limit['ref']) {
-                $suffix = ' (p. \pageref{' . $limit['ref'] . '})';
-            } else {
-                $suffix = '';
-            }
-            $limitList[] = "\\textit{{$base}{$suffix}}";
-        }
-        return $limitList;
-    }
-
-    /**
      * @param array $array
      * @return string
      * @todo Consider AND/OR
-     * @todo Add pages
      */
     private function makeTraitLimit(array $array): string
     {
-        return implode(', ', $this->makeLimitPageRecord($array['allowedFor'] ?? []));
+        $limitList = [];
+        foreach ($array['allowedFor'] ?? [] as $limit) {
+            if (is_array($limit)) {
+                $base = $limit['value'];
+                if ($limit['ref']) {
+                    $suffix = ' (p. \pageref{' . $limit['ref'] . '})';
+                } else {
+                    $suffix = '';
+                }
+            } else {
+                $base = $limit;
+                $suffix = '';
+            }
+            $limitList[] = "{$base}{$suffix}";
+        }
 
+        if ($limitList) {
+            return '\textit{' . implode(', ', $limitList) . ' only}';
+        } else {
+            return '';
+        }
     }
 
     private function makeTraitRequirements(array $array): string
