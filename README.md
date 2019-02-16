@@ -17,13 +17,11 @@ Desired functionalities:
 ## Installation guide
 1. Clone the repo to desired directory - this does not have to be under any web server
 1. Run `composer install --no-dev`
-1. Intended entry point is via `console/convert`
 
 ## Using the tool
-Tool can be called via `console/convert convert:convert {full path to source file} {full path to target file} [{full path to additional resources}]`. Source file must be a valid JSON, target file will be a TeX file. Additional resources must be valid TeX files, although they can have any names.
- 
-Run `php console/convert --help` for details.
+The entry point is the `console/convert.php` file. Run `php console/convert --help` for details on available commands and their parameters.
+
+**Caution:** the system has no safeties: if you type a name of an existing file as target, it will be overwritten. It also has minimal validation of provided JSON and will crash if given garbage.
 
 ## Architecture
-
 Originally based on [RPG Silex boilerplate](/mikron-ia/rpg-boilerplate-silex). Intended for command-line use.
