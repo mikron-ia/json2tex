@@ -208,7 +208,7 @@ class Advantage
     {
         $subtitle = $this->makeCommandLimit();
 
-        return '\subsubsection{' . $this->makeCommandName() . '}\label{' . $this->makeCommandLabel() . '}' . PHP_EOL
+        return '\subsubsection{' . $this->makeCommandName() . '}\label{trait' . $this->label . '}' . PHP_EOL
             . $subtitle . PHP_EOL
             . PHP_EOL
             . $this->makeCommandRequirements() . PHP_EOL
