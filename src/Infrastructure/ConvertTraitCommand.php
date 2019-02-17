@@ -3,7 +3,6 @@
 namespace Mikron\json2tex\Infrastructure;
 
 use Mikron\json2tex\Domain\Entity\AdvantagePack;
-use Mikron\json2tex\Domain\Entity\Document;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -42,6 +41,7 @@ class ConvertTraitCommand extends Command
      * @param OutputInterface $output
      * @return int|null|void
      * @throws \Mikron\json2tex\Domain\Exception\MalformedJsonException
+     * @throws \Mikron\json2tex\Domain\Exception\MissingComponentException
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

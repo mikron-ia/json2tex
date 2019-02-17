@@ -73,6 +73,10 @@ class AdvantagePack
         return $this->document;
     }
 
+    /**
+     * @throws MalformedJsonException
+     * @throws \Mikron\json2tex\Domain\Exception\MissingComponentException
+     */
     private function makeContentAndIndex()
     {
         $traitTexes = [];
@@ -95,6 +99,7 @@ class AdvantagePack
     /**
      * @return string
      * @throws MalformedJsonException
+     * @throws \Mikron\json2tex\Domain\Exception\MissingComponentException
      */
     public function getIndex(): string
     {

@@ -86,7 +86,7 @@ class Advantage
 
     private function makeTraitName(array $array): string
     {
-        if ( ! isset($array['name'])) {
+        if (!isset($array['name'])) {
             throw new MissingComponentException('Trait must have a name.');
         }
         return $array['name'] . ' [' . ($array['cost'] ?? '0') . ']';
@@ -102,9 +102,9 @@ class Advantage
         $limitList = [];
         foreach ($array['allowedFor'] ?? [] as $limit) {
             if (is_array($limit)) {
-                $base = $limit['value'];
-                if ($limit['ref']) {
-                    $suffix = ' (p. \pageref{' . $limit['ref'] . '})';
+                $base = $limit['name'];
+                if ($limit['label']) {
+                    $suffix = ' (p. \pageref{' . $limit['label'] . '})';
                 } else {
                     $suffix = '';
                 }
@@ -131,14 +131,23 @@ class Advantage
         }
     }
 
+    /**
+     * @param array $array
+     * @return string
+     * @throws MissingComponentException
+     */
     private function makeTraitContent(array $array): string
     {
-        if ( ! isset($array['content'])) {
+        if (!isset($array['content'])) {
             throw new MissingComponentException('Trait must have some content.');
         }
         return $array['content'];
     }
 
+    /**
+     * @param string $code
+     * @return string
+     */
     private function makeCommand(string $code): string
     {
         return "\\trait{$this->label}{$code}";
