@@ -13,6 +13,9 @@ use Mikron\json2tex\Domain\Exception\MissingComponentException;
  */
 class Advantage
 {
+    const CREATION_ONLY_ORDER = 'creation';
+    const CREATION_ONLY_TAG = '\characterCreationOnly';
+
     /**
      * @var string
      */
@@ -92,6 +95,16 @@ class Advantage
         return $array['name'] . ' [' . ($array['cost'] ?? '0') . ']';
     }
 
+    private function makeTraitType(array $array): string
+    {
+        return '\traitIs' . ucfirst($array['type']) ?? 'generic';
+    }
+
+    private function isCreationOnly(array $array)
+    {
+        return $array['creationOnly'] ?? false;
+    }
+
     /**
      * @param array $array
      * @return string
@@ -115,10 +128,13 @@ class Advantage
             $limitList[] = "{$base}{$suffix}";
         }
 
+        $traitType = $this->makeTraitType($this->array);
+        $creationOnly = $this->isCreationOnly($array) ? ', ' . self::CREATION_ONLY_TAG : '';
+
         if ($limitList) {
-            return '\textit{' . implode(', ', $limitList) . ' only}';
+            return $traitType . ', \textit{' . implode(', ', $limitList) . ' only}' . $creationOnly;
         } else {
-            return '';
+            return $traitType . $creationOnly;
         }
     }
 
@@ -190,7 +206,7 @@ class Advantage
 
     private function makeEntryFull(): string
     {
-        $subtitle = $this->makeCommandLimit(); // @todo Add racial/culture/class limit, creation only tag
+        $subtitle = $this->makeCommandLimit();
 
         return '\subsubsection{' . $this->makeCommandName() . '}\label{' . $this->makeCommandLabel() . '}' . PHP_EOL
             . $subtitle . PHP_EOL
