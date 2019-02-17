@@ -85,16 +85,10 @@ class Advantage
     private function makeTraitLabel(array $array): string
     {
         return $array['label']
-            ?? str_replace(
-                ' ',
+            ?? preg_replace(
+                '/[\s]/u',
                 '',
-                ucwords(
-                    str_replace(
-                        ['(', ')', '[', ']', '{', '}', '\'', '"'],
-                        '',
-                        $array['name']
-                    )
-                )
+                ucwords(preg_replace('/[^a-zA-Z\s]/u', '', $array['name']))
             );
     }
 
