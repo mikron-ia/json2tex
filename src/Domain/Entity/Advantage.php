@@ -47,6 +47,11 @@ class Advantage
     private $path;
 
     /**
+     * @var string
+     */
+    private $requirements;
+
+    /**
      * Tree constructor.
      * @param $json
      * @param $path
@@ -145,11 +150,12 @@ class Advantage
 
     private function makeTraitRequirements(array $array): string
     {
-        if (isset($array['requirements'])) {
-            return '\textit{' . implode(', ', $array['requirements']) . '}';
+        if (empty($this->requirements) && !empty($array['requirements'])) {
+            $this->requirements = '\textit{' . implode(', ', $array['requirements']) . '}';
         } else {
-            return '';
+            $this->requirements = '';
         }
+        return $this->requirements;
     }
 
     /**
@@ -194,14 +200,14 @@ class Advantage
         return $this->makeCommand('Content');
     }
 
-    private function makeCommandLabel(): string
-    {
-        return $this->makeCommand('Label');
-    }
-
     private function makeCommandPackLite(): string
     {
         return $this->makeCommand('PackLite');
+    }
+
+    private function makeLabel(): string
+    {
+        return "\\label{trait{$this->label}}";
     }
 
     private function dressStringInCommand(string $command, string $content): string
@@ -212,11 +218,10 @@ class Advantage
     private function makeEntryFull(): string
     {
         $subtitle = $this->makeCommandLimit();
+        $requirements = !empty($this->requirements) ? (', ' . $this->makeCommandRequirements()) : '';
 
-        return '\subsubsection{' . $this->makeCommandName() . '}\label{trait' . $this->label . '}' . PHP_EOL
-            . $subtitle . PHP_EOL
-            . PHP_EOL
-            . $this->makeCommandRequirements() . PHP_EOL
+        return '\subsubsection{' . $this->makeCommandName() . '}' . $this->makeLabel() . PHP_EOL
+            . $subtitle . $requirements . PHP_EOL
             . PHP_EOL
             . $this->makeCommandContent();
     }
@@ -224,7 +229,7 @@ class Advantage
     private function makeEntryLite(): string
     {
         return '\subsubsection{' . $this->makeCommandName() . '}' . PHP_EOL
-            . $this->makeCommandRequirements() . PHP_EOL
+            . ucfirst($this->makeCommandRequirements()) . PHP_EOL
             . PHP_EOL
             . $this->makeCommandContent();
     }
