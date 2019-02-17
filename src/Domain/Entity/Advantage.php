@@ -84,7 +84,18 @@ class Advantage
 
     private function makeTraitLabel(array $array): string
     {
-        return $array['label'] ?? str_replace(' ', '', ucwords($array['name']));
+        return $array['label']
+            ?? str_replace(
+                ' ',
+                '',
+                ucwords(
+                    str_replace(
+                        ['(', ')', '[', ']', '{', '}', '\'', '"'],
+                        '',
+                        $array['name']
+                    )
+                )
+            );
     }
 
     private function makeTraitName(array $array): string
@@ -97,7 +108,7 @@ class Advantage
 
     private function makeTraitType(array $array): string
     {
-        return '\traitIs' . ucfirst($array['type']) ?? 'generic';
+        return '\traitIs' . ucfirst($array['type'] ?? 'generic');
     }
 
     private function isCreationOnly(array $array)
