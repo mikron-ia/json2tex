@@ -13,7 +13,6 @@ use Mikron\json2tex\Domain\Exception\MissingComponentException;
  */
 class Advantage
 {
-    const CREATION_ONLY_ORDER = 'creation';
     const CREATION_ONLY_TAG = '\characterCreationOnly';
 
     /**
@@ -89,8 +88,7 @@ class Advantage
 
     private function makeTraitLabel(array $array): string
     {
-        return $array['label']
-            ?? preg_replace(
+        return $array['label'] ?? preg_replace(
                 '/[\s]/u',
                 '',
                 ucwords(preg_replace('/[^a-zA-Z\s]/u', '', $array['name']))
@@ -107,7 +105,7 @@ class Advantage
 
     private function makeTraitType(array $array): string
     {
-        return '\traitIs' . ucfirst($array['type'] ?? 'generic');
+        return ucfirst($array['type'] ?? 'generic') . ' trait';
     }
 
     private function isCreationOnly(array $array)
@@ -142,9 +140,9 @@ class Advantage
         $creationOnly = $this->isCreationOnly($array) ? ', ' . self::CREATION_ONLY_TAG : '';
 
         if ($limitList) {
-            return $traitType . ', \textit{' . implode(', ', $limitList) . ' only}' . $creationOnly;
+            return '\textit{' . $traitType . '}, \textit{' . implode(', ', $limitList) . ' only}' . $creationOnly;
         } else {
-            return $traitType . $creationOnly;
+            return '\textit{' . $traitType . '}' . $creationOnly;
         }
     }
 
