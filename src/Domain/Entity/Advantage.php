@@ -121,7 +121,7 @@ class Advantage
     private function makeTraitLimit(array $array): string
     {
         $limitList = [];
-        foreach ($array['allowedFor'] ?? [] as $limit) {
+        foreach ($array['limitedTo'] ?? [] as $limit) {
             if (is_array($limit)) {
                 $base = $limit['name'];
                 if ($limit['label']) {
@@ -137,19 +137,61 @@ class Advantage
         }
 
         $traitType = $this->makeTraitType($this->array);
-        $creationOnly = $this->isCreationOnly($array) ? ', ' . self::CREATION_ONLY_TAG : '';
+        $creationOnly = $this->isCreationOnly($array) ? self::CREATION_ONLY_TAG : '';
 
         if ($limitList) {
-            return '\textit{' . $traitType . '}, \textit{' . implode(', ', $limitList) . ' only}' . $creationOnly;
+            return '\textit{' . $traitType . '}' . PHP_EOL . PHP_EOL
+                . '\textit{' . ucfirst(implode(', ', $limitList)) . ' only}' . PHP_EOL . PHP_EOL
+                . $creationOnly;
         } else {
-            return '\textit{' . $traitType . '}' . $creationOnly;
+            return '\textit{' . $traitType . '}' . PHP_EOL . PHP_EOL
+                . $creationOnly;
         }
+    }
+
+    /**
+     * @param array $array
+     * @return string
+     */
+    private function makeTraitCommonality(array $array, string $key, string $text): string
+    {
+        $list = [];
+        foreach ($array[$key] ?? [] as $limit) {
+            if (is_array($limit)) {
+                $base = $limit['name'];
+                if ($limit['label']) {
+                    $suffix = ' (p. \pageref{' . $limit['label'] . '})';
+                } else {
+                    $suffix = '';
+                }
+            } else {
+                $base = $limit;
+                $suffix = '';
+            }
+            $list[] = "{$base}{$suffix}";
+        }
+
+        if ($list) {
+            return '\textit{' . $text . ': ' . implode(', ', $list) . '}';
+        } else {
+            return '';
+        }
+    }
+
+    private function makeTraitCommon(array $array): string
+    {
+        return $this->makeTraitCommonality($array, 'commonFor', 'Common for');
+    }
+
+    private function makeTraitRare(array $array): string
+    {
+        return $this->makeTraitCommonality($array, 'rareFor', 'Rare for');
     }
 
     private function makeTraitRequirements(array $array): string
     {
         if (empty($this->requirements) && !empty($array['requirements'])) {
-            $this->requirements = '\textit{' . implode(', ', $array['requirements']) . '}';
+            $this->requirements = '\textit{' . ucfirst(implode(', ', $array['requirements'])) . '}';
         } else {
             $this->requirements = '';
         }
@@ -188,6 +230,16 @@ class Advantage
         return $this->makeCommand('Limit');
     }
 
+    private function makeCommandCommon(): string
+    {
+        return $this->makeCommand('Common');
+    }
+
+    private function makeCommandRare(): string
+    {
+        return $this->makeCommand('Rare');
+    }
+
     private function makeCommandRequirements(): string
     {
         return $this->makeCommand('Requirements');
@@ -216,19 +268,31 @@ class Advantage
     private function makeEntryFull(): string
     {
         $subtitle = $this->makeCommandLimit();
-        $requirements = !empty($this->requirements) ? (', ' . $this->makeCommandRequirements()) : '';
+        $requirements = !empty($this->requirements) ? ($this->makeCommandRequirements()) : '';
 
-        return '\subsubsection{' . $this->makeCommandName() . '}' . $this->makeLabel() . PHP_EOL
-            . $subtitle . $requirements . PHP_EOL
-            . PHP_EOL
+        return '\subsubsection{' . $this->makeCommandName() . '}' . $this->makeLabel()
+            . PHP_EOL . PHP_EOL
+            . $subtitle
+            . PHP_EOL . PHP_EOL
+            . $requirements
+            . PHP_EOL . PHP_EOL
+            . ucfirst($this->makeCommandCommon())
+            . PHP_EOL . PHP_EOL
+            . ucfirst($this->makeCommandRare())
+            . PHP_EOL . PHP_EOL
             . $this->makeCommandContent();
     }
 
     private function makeEntryLite(): string
     {
-        return '\subsubsection{' . $this->makeCommandName() . '}' . PHP_EOL
-            . ucfirst($this->makeCommandRequirements()) . PHP_EOL
-            . PHP_EOL
+        return '\subsubsection{' . $this->makeCommandName() . '}'
+            . PHP_EOL . PHP_EOL
+            . $this->makeCommandRequirements()
+            . PHP_EOL . PHP_EOL
+            . $this->makeCommandCommon()
+            . PHP_EOL . PHP_EOL
+            . $this->makeCommandRare()
+            . PHP_EOL . PHP_EOL
             . $this->makeCommandContent();
     }
 
@@ -242,6 +306,8 @@ class Advantage
         return implode(PHP_EOL, [
             $this->dressStringInCommand($this->makeCommandName(), $this->makeTraitName($array)),
             $this->dressStringInCommand($this->makeCommandLimit(), $this->makeTraitLimit($array)),
+            $this->dressStringInCommand($this->makeCommandCommon(), $this->makeTraitCommon($array)),
+            $this->dressStringInCommand($this->makeCommandRare(), $this->makeTraitRare($array)),
             $this->dressStringInCommand($this->makeCommandRequirements(), $this->makeTraitRequirements($array)),
             $this->dressStringInCommand($this->makeCommandContent(), $this->makeTraitContent($array)),
             PHP_EOL,
