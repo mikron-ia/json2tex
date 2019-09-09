@@ -110,7 +110,7 @@ class Advantage
 
     private function makeTraitGroup(array $array): string
     {
-        return isset($array['group']) ? (' (' . $array['group'] . ' group)') : '';
+        return isset($array['group']) ? (' (' . ucfirst($array['group']) . ' group)') : '';
     }
 
     private function isCreationOnly(array $array)
