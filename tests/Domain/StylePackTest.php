@@ -4,9 +4,9 @@ namespace Mikron\json2tex\Tests;
 
 use Mikron\json2tex\Domain\Entity\Document;
 use Mikron\json2tex\Domain\Entity\StylePack;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-final class StylePackTest extends PHPUnit_Framework_TestCase
+final class StylePackTest extends TestCase
 {
     /**
      * @test

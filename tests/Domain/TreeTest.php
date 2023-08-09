@@ -3,9 +3,9 @@
 namespace Mikron\json2tex\Tests;
 
 use Mikron\json2tex\Domain\Entity\Tree;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-final class TreeTest extends PHPUnit_Framework_TestCase
+final class TreeTest extends TestCase
 {
     /**
      * @test
@@ -22,7 +22,7 @@ final class TreeTest extends PHPUnit_Framework_TestCase
      */
     public function isMalformedJSONDetected()
     {
-        $this->setExpectedException('Mikron\json2tex\Domain\Exception\MalformedJsonException');
+        $this->expectException('Mikron\json2tex\Domain\Exception\MalformedJsonException');
         new Tree('{fail:}');
     }
 }

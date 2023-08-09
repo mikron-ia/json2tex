@@ -3,9 +3,9 @@
 namespace Mikron\json2tex\Tests;
 
 use Mikron\json2tex\Domain\Entity\Skill;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
-class SkillTest extends PHPUnit_Framework_TestCase
+class SkillTest extends TestCase
 {
     /**
      * @test
