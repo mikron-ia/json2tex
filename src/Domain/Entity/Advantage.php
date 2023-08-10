@@ -134,21 +134,7 @@ class Advantage
      */
     private function makeTraitLimit(array $array): string
     {
-        $limitList = [];
-        foreach ($array['limitedTo'] ?? [] as $limit) {
-            if (is_array($limit)) {
-                $base = $limit['name'];
-                if ($limit['label']) {
-                    $suffix = ' (p. \pageref{' . $limit['label'] . '})';
-                } else {
-                    $suffix = '';
-                }
-            } else {
-                $base = $limit;
-                $suffix = '';
-            }
-            $limitList[] = "{$base}{$suffix}";
-        }
+        $limitList = $this->makeTraitDescribingList($array, 'limitedTo');
 
         $creationOnly = $this->isCreationOnly($array) ? self::CREATION_ONLY_TAG : '';
 
@@ -167,21 +153,7 @@ class Advantage
      */
     private function makeTraitCommonality(array $array, string $key, string $text): string
     {
-        $list = [];
-        foreach ($array[$key] ?? [] as $limit) {
-            if (is_array($limit)) {
-                $base = $limit['name'];
-                if ($limit['label']) {
-                    $suffix = ' (p. \pageref{' . $limit['label'] . '})';
-                } else {
-                    $suffix = '';
-                }
-            } else {
-                $base = $limit;
-                $suffix = '';
-            }
-            $list[] = "{$base}{$suffix}";
-        }
+        $list = $this->makeTraitDescribingList($array, $key);
 
         if ($list) {
             return '\textit{' . $text . ': ' . implode(', ', $list) . '}';
@@ -221,6 +193,27 @@ class Advantage
             throw new MissingComponentException('Trait must have some content.');
         }
         return $array['content'];
+    }
+
+    private function makeTraitDescribingList(array $array, string $key): array
+    {
+        $list = [];
+        foreach ($array[$key] ?? [] as $limit) {
+            if (is_array($limit)) {
+                $base = $limit['name'];
+                if ($limit['label']) {
+                    $suffix = ' (p. \pageref{' . $limit['label'] . '})';
+                } else {
+                    $suffix = '';
+                }
+            } else {
+                $base = $limit;
+                $suffix = '';
+            }
+            $list[] = "{$base}{$suffix}";
+        }
+
+        return $list;
     }
 
     /**
