@@ -116,18 +116,7 @@ TREEEND;
             foreach ($skills as $skill) {
                 $label = $skill['name'];
 
-                if (isset($skill['description'])) {
-                    $insides = str_replace('\n', PHP_EOL, implode(PHP_EOL . PHP_EOL, $skill['description']));
-                } elseif (isset($skill['file'])) {
-                    $path = $this->path . $skill['file'];
-                    if (file_exists($path)) {
-                        $insides = file_get_contents($path);
-                    } else {
-                        $insides = "[file not found]";
-                    }
-                } else {
-                    $insides = "[no data found]";
-                }
+                $insides = $this->makeInsides($skill);
 
                 $description = <<<DESCRIPTION
 
@@ -147,18 +136,7 @@ DESCRIPTION;
                 $label = $skill['name'];
                 $rank = $skill['rank'];
 
-                if (isset($skill['description'])) {
-                    $insides = str_replace('\n', PHP_EOL, implode(PHP_EOL . PHP_EOL, $skill['description']));
-                } elseif (isset($skill['file'])) {
-                    $path = $this->path . $skill['file'];
-                    if (file_exists($path)) {
-                        $insides = file_get_contents($path);
-                    } else {
-                        $insides = "[file not found]";
-                    }
-                } else {
-                    $insides = "[no data found]";
-                }
+                $insides = $this->makeInsides($skill);
 
                 $description = <<<DESCRIPTION
 
@@ -281,6 +259,24 @@ DESCRIPTION;
             }
         }
         return $content;
+    }
+
+    private function makeInsides(array $skill): string
+    {
+        if (isset($skill['description'])) {
+            $insides = str_replace('\n', PHP_EOL, implode(PHP_EOL . PHP_EOL, $skill['description']));
+        } elseif (isset($skill['file'])) {
+            $path = $this->path . $skill['file'];
+            if (file_exists($path)) {
+                $insides = file_get_contents($path);
+            } else {
+                $insides = "[file not found]";
+            }
+        } else {
+            $insides = "[no data found]";
+        }
+
+        return $insides;
     }
 
     /**
