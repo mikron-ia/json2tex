@@ -100,7 +100,12 @@ class Advantage
         if (!isset($array['name'])) {
             throw new MissingComponentException('Trait must have a name.');
         }
-        return $array['name'] . ' [' . ($array['cost'] ?? '0') . ']';
+        return $array['name'];
+    }
+
+    private function makeTraitCost(array $array): string
+    {
+        return $array['cost'] ?? '0';
     }
 
     private function makeTraitType(array $array): string
@@ -232,6 +237,11 @@ class Advantage
         return $this->makeCommand('Name');
     }
 
+    private function makeCommandCost(): string
+    {
+        return $this->makeCommand('Cost');
+    }
+
     private function makeCommandTag(): string
     {
         return $this->makeCommand('Tag');
@@ -281,7 +291,7 @@ class Advantage
     {
         $requirements = !empty($this->requirements) ? ($this->makeCommandRequirements()) : '';
 
-        return '\subsubsection{' . $this->makeCommandName() . '}' . $this->makeLabel()
+        return '\subsubsection{{' . $this->makeCommandName() . '} [' . $this->makeCommandCost() . ']' . '}' . $this->makeLabel()
             . PHP_EOL . PHP_EOL
             . $this->makeCommandTag()
             . PHP_EOL . PHP_EOL
@@ -298,7 +308,7 @@ class Advantage
 
     private function makeEntryLite(): string
     {
-        return '\subsubsection{' . $this->makeCommandName() . '}'
+        return '\subsubsection{{' . $this->makeCommandName() . '} [' . $this->makeCommandCost() . ']' . '}'
             . PHP_EOL . PHP_EOL
             . $this->makeCommandTag()
             . PHP_EOL . PHP_EOL
@@ -320,6 +330,7 @@ class Advantage
     {
         return implode(PHP_EOL, [
             $this->dressStringInCommand($this->makeCommandName(), $this->makeTraitName($array)),
+            $this->dressStringInCommand($this->makeCommandCost(), $this->makeTraitCost($array)),
             $this->dressStringInCommand($this->makeCommandTag(), $this->makeTraitTag($array)),
             $this->dressStringInCommand($this->makeCommandLimit(), $this->makeTraitLimit($array)),
             $this->dressStringInCommand($this->makeCommandCommon(), $this->makeTraitCommon($array)),
