@@ -153,9 +153,13 @@ DESCRIPTION;
         return $descriptions;
     }
 
-    private function orderNotesByRank()
+    /**
+     * @param array $skills
+     *
+     * @return int[]
+     */
+    private function orderNodesByRank(array $skills): array
     {
-        $skills = $this->array['skills'] ?? [];
         $nodesByRank = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0];
 
         foreach ($skills as $skill => $unorderedNode) {
@@ -173,21 +177,13 @@ DESCRIPTION;
     }
 
     /**
-     * @return string
-     * @throws \Exception
+     * @param array $skills
+     *
+     * @return array
      */
-    private function makeTreeInterior()
+    private function prepareSkillsAsNodes(array $skills): array
     {
-        /* Init */
-        $content = '';
-        $nodesByRankPosition = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0];
-        $unitByRank = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0];
         $nodes = [];
-        $nodesByLabel = [];
-
-        $skills = $this->array['skills'] ?? [];
-
-        $nodesByRank = $this->orderNotesByRank();
 
         foreach ($skills as $skill => $unorderedNode) {
             $node = $unorderedNode;
@@ -195,14 +191,78 @@ DESCRIPTION;
             $nodes[] = $node;
         }
 
-        /* Calculate tree width */
+        return $nodes;
+    }
 
-        if (isset($this->array['width'])) {
-            $width = $this->array['width'];
-        } else {
-            $width = max($nodesByRank);
+    /**
+     * @param array $nodes
+     *
+     * @return string
+     */
+    private function turnSkillsIntoNodes(array $nodes): string
+    {
+        $content = '';
+
+        foreach ($nodes as $node) {
+            $content .= "\t\t\t" . '\node[skill] at (' . $node['x'] . ', ' . $node['y'] . ') (' . $node['label'] . ') {' . $node['name'] . '};' . PHP_EOL;
         }
 
+        return $content;
+    }
+
+    /**
+     * @param array $nodes Nodes to add
+     * @param array $nodesByLabel List of nodes, keyed by label
+     *
+     * @return string
+     *
+     * @throws \Exception
+     */
+    private function prepareDrawnLines(array $nodes, array $nodesByLabel): string
+    {
+        $content = '';
+
+        foreach ($nodes as $node) {
+            if (!empty($node['requires'])) {
+                foreach ($node['requires'] as $requirementLabel) {
+                    if (empty($nodesByLabel[$requirementLabel])) {
+                        throw new \Exception("Node $requirementLabel not found");
+                    }
+                    $requiredNode = $nodesByLabel[$requirementLabel];
+                    $content .= "\t\t\t" . '\draw[arrowreq] ('
+                        . $requiredNode['label'] . '.south) -- ('
+                        . $node['label'] . '.north);'
+                        . PHP_EOL;
+                }
+            }
+        }
+
+        return $content;
+    }
+
+    /**
+     * @return string
+     * @throws \Exception
+     */
+    private function makeTreeInterior(): string
+    {
+        /* Init */
+        $content = '';
+        $nodesByRankPosition = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0];
+        $unitByRank = [1 => 0, 2 => 0, 3 => 0, 4 => 0, 5 => 0];
+        $nodesByLabel = [];
+
+        $nodes = $this->prepareSkillsAsNodes($this->array['skills'] ?? []);
+        $nodesByRank = $this->orderNodesByRank($this->array['skills'] ?? []);
+
+        /* Draw scale on the left */
+        $scale = '';
+        $content .= $scale;
+
+        /* Calculate tree width */
+        $width = $this->array['width'] ?? max($nodesByRank);
+
+        /* Draw nodes */
         for ($i = 1; $i <= 5; $i++) {
             if ($nodesByRank[$i] > 0) {
                 $unitByRank[$i] = ceil($width / $nodesByRank[$i]) + 2;
@@ -212,12 +272,6 @@ DESCRIPTION;
 
             $nodesByRankPosition[$i] = 0;
         }
-
-        /* Draw scale on the left */
-        $scale = '';
-        $content .= $scale;
-
-        /* Draw nodes */
 
         $nodeCount = count($nodes);
 
@@ -238,26 +292,11 @@ DESCRIPTION;
             }
         }
 
-        foreach ($nodes as $node) {
-            $content .= "\t\t\t" . '\node[skill] at (' . $node['x'] . ', ' . $node['y'] . ') (' . $node['label'] . ') {' . $node['name'] . '};' . PHP_EOL;
-        }
+        $content .= $this->turnSkillsIntoNodes($nodes);
 
-        /* Draw lines */
+        /* Draw the lines */
+        $content .= $this->prepareDrawnLines($nodes, $nodesByLabel);
 
-        foreach ($nodes as $node) {
-            if (!empty($node['requires'])) {
-                foreach ($node['requires'] as $requirementLabel) {
-                    if (empty($nodesByLabel[$requirementLabel])) {
-                        throw new \Exception("Node $requirementLabel not found");
-                    }
-                    $requiredNode = $nodesByLabel[$requirementLabel];
-                    $content .= "\t\t\t" . '\draw[arrowreq] ('
-                        . $requiredNode['label'] . '.south) -- ('
-                        . $node['label'] . '.north);'
-                        . PHP_EOL;
-                }
-            }
-        }
         return $content;
     }
 
