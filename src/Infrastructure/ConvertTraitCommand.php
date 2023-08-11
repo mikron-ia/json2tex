@@ -17,6 +17,9 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class ConvertTraitCommand extends Command
 {
+    private const EXIT_WITH_SUCCESS = 0;
+    private const EXIT_WITH_ERROR = 1;
+
     protected function configure()
     {
         $this
@@ -43,12 +46,12 @@ class ConvertTraitCommand extends Command
      * @param InputInterface $input
      * @param OutputInterface $output
      *
-     * @return void
+     * @return int
      *
      * @throws MalformedJsonException
      * @throws MissingComponentException
      */
-    protected function execute(InputInterface $input, OutputInterface $output): void
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $source = $input->getArgument('source');
         $target = $input->getArgument('target');
@@ -58,14 +61,19 @@ class ConvertTraitCommand extends Command
 
         if (!$json) {
             $output->writeln('Unable to read source file.');
-        } else {
-            $document = new AdvantagePack($json);
-            if (file_put_contents($target, $document->getContent()) === false) {
-                $output->writeln('Unable to write target file.');
-            }
-            if (file_put_contents($index, $document->getIndex()) === false) {
-                $output->writeln('Unable to write target file.');
-            }
+            return self::EXIT_WITH_ERROR;
         }
+
+        $document = new AdvantagePack($json);
+
+        if (
+            file_put_contents($target, $document->getContent()) === false ||
+            file_put_contents($index, $document->getIndex()) === false
+        ) {
+            $output->writeln('Unable to write target file.');
+            return self::EXIT_WITH_ERROR;
+        }
+
+        return self::EXIT_WITH_SUCCESS;
     }
 }
