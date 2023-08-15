@@ -3,6 +3,7 @@
 namespace Mikron\json2tex\Domain\Entity;
 
 use Mikron\json2tex\Domain\Exception\MalformedJsonException;
+use Mikron\json2tex\Domain\Exception\MissingComponentException;
 
 /**
  * Class Document
@@ -71,6 +72,7 @@ class Document
     /**
      * @return string
      * @throws MalformedJsonException
+     * @throws MissingComponentException
      */
     public function getDocument(): string
     {
@@ -98,8 +100,9 @@ class Document
 
     /**
      * @return string
+     *
      * @throws MalformedJsonException
-     * @throws \Exception
+     * @throws MissingComponentException
      */
     public function getContent(): string
     {

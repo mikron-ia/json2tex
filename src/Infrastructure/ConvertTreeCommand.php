@@ -4,6 +4,7 @@ namespace Mikron\json2tex\Infrastructure;
 
 use Mikron\json2tex\Domain\Entity\Document;
 use Mikron\json2tex\Domain\Exception\MalformedJsonException;
+use Mikron\json2tex\Domain\Exception\MissingComponentException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -45,6 +46,7 @@ class ConvertTreeCommand extends Command
      * @return void
      *
      * @throws MalformedJsonException
+     * @throws MissingComponentException
      */
     protected function execute(InputInterface $input, OutputInterface $output): void
     {

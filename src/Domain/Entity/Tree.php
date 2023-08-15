@@ -3,6 +3,7 @@
 namespace Mikron\json2tex\Domain\Entity;
 
 use Mikron\json2tex\Domain\Exception\MalformedJsonException;
+use Mikron\json2tex\Domain\Exception\MissingComponentException;
 
 class Tree
 {
@@ -216,24 +217,22 @@ DESCRIPTION;
      *
      * @return string
      *
-     * @throws \Exception
+     * @throws MissingComponentException
      */
     private function prepareDrawnLines(array $nodes, array $nodesByLabel): string
     {
         $content = '';
 
         foreach ($nodes as $node) {
-            if (!empty($node['requires'])) {
-                foreach ($node['requires'] as $requirementLabel) {
-                    if (empty($nodesByLabel[$requirementLabel])) {
-                        throw new \Exception("Node $requirementLabel not found");
-                    }
-                    $requiredNode = $nodesByLabel[$requirementLabel];
-                    $content .= "\t\t\t" . '\draw[arrowreq] ('
-                        . $requiredNode['label'] . '.south) -- ('
-                        . $node['label'] . '.north);'
-                        . PHP_EOL;
+            foreach ($node['requires'] ?? [] as $requirementLabel) {
+                if (empty($nodesByLabel[$requirementLabel])) {
+                    throw new MissingComponentException("Node $requirementLabel not found");
                 }
+                $requiredNode = $nodesByLabel[$requirementLabel];
+                $content .= "\t\t\t" . '\draw[arrowreq] ('
+                    . $requiredNode['label'] . '.south) -- ('
+                    . $node['label'] . '.north);'
+                    . PHP_EOL;
             }
         }
 
@@ -242,7 +241,8 @@ DESCRIPTION;
 
     /**
      * @return string
-     * @throws \Exception
+     *
+     * @throws MissingComponentException
      */
     private function makeTreeInterior(): string
     {
@@ -320,9 +320,10 @@ DESCRIPTION;
 
     /**
      * @return string
-     * @throws \Exception
+     *
+     * @throws MissingComponentException
      */
-    public function getTex()
+    public function getTex(): string
     {
         if (empty($this->tex)) {
             $interior = $this->makeTreeInterior();
