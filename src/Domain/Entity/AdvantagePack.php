@@ -2,40 +2,40 @@
 
 namespace Mikron\json2tex\Domain\Entity;
 
-
 use Mikron\json2tex\Domain\Exception\MalformedJsonException;
+use Mikron\json2tex\Domain\Exception\MissingComponentException;
 
 class AdvantagePack
 {
     /**
      * @var string
      */
-    private $json;
+    private string $json;
 
     /**
      * @var array
      */
-    private $array;
+    private mixed $array;
 
     /**
      * @var string
      */
-    private $document;
+    private string $document;
 
     /**
      * @var string
      */
-    private $path;
+    private string $path;
 
     /**
      * @var string
      */
-    private $index;
+    private string $index;
 
     /**
      * @var string
      */
-    private $content;
+    private string $content;
 
     /**
      * Document constructor.
@@ -75,7 +75,7 @@ class AdvantagePack
 
     /**
      * @throws MalformedJsonException
-     * @throws \Mikron\json2tex\Domain\Exception\MissingComponentException
+     * @throws MissingComponentException
      */
     private function makeContentAndIndex()
     {
@@ -98,8 +98,9 @@ class AdvantagePack
 
     /**
      * @return string
+     *
      * @throws MalformedJsonException
-     * @throws \Mikron\json2tex\Domain\Exception\MissingComponentException
+     * @throws MissingComponentException
      */
     public function getIndex(): string
     {

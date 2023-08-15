@@ -2,7 +2,6 @@
 
 namespace Mikron\json2tex\Domain\Entity;
 
-
 use Mikron\json2tex\Domain\Component\CommandSuffix;
 use Mikron\json2tex\Domain\Exception\MalformedJsonException;
 use Mikron\json2tex\Domain\Exception\MissingComponentException;
@@ -53,8 +52,10 @@ class Advantage
 
     /**
      * Tree constructor.
-     * @param $json
-     * @param $path
+     *
+     * @param string $json
+     * @param string $path
+     *
      * @throws MalformedJsonException
      */
     public function __construct(string $json, string $path = "")
@@ -89,7 +90,8 @@ class Advantage
 
     private function makeTraitLabel(array $array): string
     {
-        return $array['label'] ?? preg_replace(
+        return $array['label']
+            ?? preg_replace(
                 '/[\s]/u',
                 '',
                 ucwords(preg_replace('/[^a-zA-Z\s]/u', '', $array['name']))

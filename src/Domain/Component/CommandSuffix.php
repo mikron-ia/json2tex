@@ -2,7 +2,6 @@
 
 namespace Mikron\json2tex\Domain\Component;
 
-
 enum CommandSuffix: string
 {
     case Name = 'Name';
