@@ -7,15 +7,15 @@ class Skill
     /**
      * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * @var int
      */
-    private $rank;
+    private int $rank;
 
     /**
      * @var string[]
      */
-    private $parameters;
+    private array $parameters;
 }

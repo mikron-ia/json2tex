@@ -13,7 +13,7 @@ use Mikron\json2tex\Domain\Exception\MissingComponentException;
  */
 class Advantage
 {
-    const CREATION_ONLY_TAG = '\characterCreationOnly';
+    private const CREATION_ONLY_TAG = '\characterCreationOnly';
 
     /**
      * @var string
@@ -21,9 +21,9 @@ class Advantage
     private string $json;
 
     /**
-     * @var array
+     * @var array|null
      */
-    private array $array;
+    private ?array $array;
 
     /**
      * @var string
@@ -98,6 +98,13 @@ class Advantage
             );
     }
 
+    /**
+     * @param array $array
+     *
+     * @return string
+     *
+     * @throws MissingComponentException
+     */
     private function makeTraitName(array $array): string
     {
         if (!isset($array['name'])) {
@@ -121,14 +128,14 @@ class Advantage
         return isset($array['group']) ? (' (' . ucfirst($array['group']) . ' group)') : '';
     }
 
-    private function isCreationOnly(array $array)
+    private function isCreationOnly(array $array): bool
     {
         return $array['creationOnly'] ?? false;
     }
 
     private function makeTraitTag(array $array): string
     {
-        return '\textit{' . $this->makeTraitType($this->array) . $this->makeTraitGroup($this->array) . '}';
+        return '\textit{' . $this->makeTraitType($array) . $this->makeTraitGroup($array) . '}';
     }
 
     /**
@@ -138,7 +145,6 @@ class Advantage
     private function makeTraitLimit(array $array): string
     {
         $limitList = $this->makeTraitDescribingList($array, 'limitedTo');
-
         $creationOnly = $this->isCreationOnly($array) ? self::CREATION_ONLY_TAG : '';
 
         if ($limitList) {
@@ -152,17 +158,21 @@ class Advantage
 
     /**
      * @param array $array
+     * @param string $key
+     * @param string $text
+     *
      * @return string
      */
     private function makeTraitCommonality(array $array, string $key, string $text): string
     {
         $list = $this->makeTraitDescribingList($array, $key);
+        $commonality = '';
 
         if ($list) {
-            return '\textit{' . $text . ': ' . implode(', ', $list) . '}';
-        } else {
-            return '';
+            $commonality = '\textit{' . $text . ': ' . implode(', ', $list) . '}';
         }
+
+        return $commonality;
     }
 
     private function makeTraitCommon(array $array): string
@@ -177,11 +187,12 @@ class Advantage
 
     private function makeTraitRequirements(array $array): string
     {
+        $this->requirements = '';
+
         if (empty($this->requirements) && !empty($array['requirements'])) {
             $this->requirements = '\textit{' . ucfirst(implode(', ', $array['requirements'])) . '}';
-        } else {
-            $this->requirements = '';
         }
+
         return $this->requirements;
     }
 
@@ -201,17 +212,16 @@ class Advantage
     private function makeTraitDescribingList(array $array, string $key): array
     {
         $list = [];
+
         foreach ($array[$key] ?? [] as $limit) {
+            $suffix = '';
             if (is_array($limit)) {
                 $base = $limit['name'];
                 if ($limit['label']) {
                     $suffix = ' (p. \pageref{' . $limit['label'] . '})';
-                } else {
-                    $suffix = '';
                 }
             } else {
                 $base = $limit;
-                $suffix = '';
             }
             $list[] = "{$base}{$suffix}";
         }
@@ -221,6 +231,7 @@ class Advantage
 
     /**
      * @param CommandSuffix $code
+     *
      * @return string
      */
     private function makeCommand(CommandSuffix $code): string
@@ -307,6 +318,7 @@ class Advantage
 
     /**
      * @return string
+     *
      * @throws MissingComponentException
      */
     public function getTex(): string
