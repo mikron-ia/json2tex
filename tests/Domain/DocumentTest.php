@@ -3,6 +3,7 @@
 namespace Mikron\json2tex\Tests;
 
 use Mikron\json2tex\Domain\Entity\Document;
+use Mikron\json2tex\Domain\Exception\MalformedJsonException;
 use PHPUnit\Framework\TestCase;
 
 final class DocumentTest extends TestCase
@@ -10,9 +11,18 @@ final class DocumentTest extends TestCase
     /**
      * @test
      */
+    public function isDocumentCreatedOnEmpty()
+    {
+        $this->expectException(MalformedJsonException::class);
+        new Document('');
+    }
+
+    /**
+     * @test
+     */
     public function isDocumentCreatedCorrectly()
     {
-        $character = new Document("");
+        $character = new Document('{}');
 
         $this->assertInstanceOf('Mikron\json2tex\Domain\Entity\Document', $character);
     }
@@ -21,6 +31,8 @@ final class DocumentTest extends TestCase
      * @test
      * @dataProvider correctDataProvider
      * @param array $data
+     *
+     * @throws MalformedJsonException
      */
     public function isJsonReturnedCorrectly(array $data)
     {
@@ -35,6 +47,8 @@ final class DocumentTest extends TestCase
      * @test
      * @dataProvider correctDataProvider
      * @param array $data
+     *
+     * @throws MalformedJsonException
      */
     public function isArrayReturnedCorrectly(array $data)
     {

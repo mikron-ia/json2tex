@@ -2,6 +2,7 @@
 
 namespace Mikron\json2tex\Domain\Entity;
 
+use Mikron\json2tex\Domain\Component\JsonHandler;
 use Mikron\json2tex\Domain\Exception\MalformedJsonException;
 use Mikron\json2tex\Domain\Exception\MissingComponentException;
 
@@ -11,6 +12,8 @@ use Mikron\json2tex\Domain\Exception\MissingComponentException;
  */
 class Document
 {
+    use JsonHandler;
+
     /**
      * @var string
      */
@@ -43,13 +46,16 @@ class Document
 
     /**
      * Document constructor.
+     *
      * @param string $json
      * @param string $path
+     *
+     * @throws MalformedJsonException
      */
-    public function __construct($json, $path = "")
+    public function __construct(string $json, string $path = "")
     {
         $this->json = $json;
-        $this->array = json_decode($this->json, true);
+        $this->array = $this->decodeJson($json);
         $this->path = $path;
     }
 
