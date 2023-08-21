@@ -8,11 +8,6 @@ use Mikron\json2tex\Domain\Exception\MissingComponentException;
 class Tree
 {
     /**
-     * @var string
-     */
-    private $json;
-
-    /**
      * @var array
      */
     private $array;
@@ -21,11 +16,6 @@ class Tree
      * @var string
      */
     private $tex;
-
-    /**
-     * @var Skill[]
-     */
-    private $skills;
 
     /**
      * @var string
@@ -50,7 +40,6 @@ class Tree
      */
     public function __construct($json, $path = "")
     {
-        $this->json = $json;
         $this->array = json_decode($json, true);
 
         if ($this->array === null) {
@@ -166,7 +155,6 @@ DESCRIPTION;
         foreach ($skills as $skill => $unorderedNode) {
             $node = $unorderedNode;
             $node['label'] = $skill;
-            $nodes[] = $node;
 
             if (!isset($nodesByRank[$unorderedNode['rank']])) {
                 $nodesByRank[$unorderedNode['rank']] = 0;
@@ -302,17 +290,15 @@ DESCRIPTION;
 
     private function makeInsides(array $skill): string
     {
+        $insides = "[file not found]";
+
         if (isset($skill['description'])) {
             $insides = str_replace('\n', PHP_EOL, implode(PHP_EOL . PHP_EOL, $skill['description']));
         } elseif (isset($skill['file'])) {
             $path = $this->path . $skill['file'];
             if (file_exists($path)) {
                 $insides = file_get_contents($path);
-            } else {
-                $insides = "[file not found]";
             }
-        } else {
-            $insides = "[no data found]";
         }
 
         return $insides;
