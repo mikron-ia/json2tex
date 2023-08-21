@@ -14,32 +14,32 @@ class Document
     /**
      * @var string
      */
-    private $json;
+    private string $json;
 
     /**
      * @var array
      */
-    private $array;
+    private array $array;
 
     /**
      * @var string
      */
-    private $document;
+    private string $document;
 
     /**
      * @var string
      */
-    private $header = '';
+    private string $header = '';
 
     /**
      * @var string
      */
-    private $footer = '';
+    private string $footer = '';
 
     /**
      * @var string
      */
-    private $path;
+    private string $path;
 
     /**
      * Document constructor.

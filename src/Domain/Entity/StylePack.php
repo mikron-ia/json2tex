@@ -6,6 +6,7 @@ namespace Mikron\json2tex\Domain\Entity;
  * Simple wrapper on styles
  *
  * @todo Add loading from file
+ * 
  * @package Mikron\json2tex\Domain\Entity
  */
 class StylePack
@@ -13,7 +14,7 @@ class StylePack
     /**
      * @var string
      */
-    private $tex;
+    private string $tex;
 
     public function __construct(string $tex)
     {
@@ -23,7 +24,7 @@ class StylePack
     /**
      * @return string
      */
-    function __toString(): string
+    public function __toString(): string
     {
         return $this->getTeX();
     }
