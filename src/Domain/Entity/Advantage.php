@@ -8,8 +8,11 @@ use Mikron\json2tex\Domain\Exception\MissingComponentException;
 
 /**
  * Class Advantage
+ *
  * @package Mikron\json2tex\Domain\Entity
- * @note This should be called 'Trait', but cannot be. It represents both Advantages and Disadvantages.
+ *
+ * @note This should be called 'Trait', but cannot be due to PHP reserved words
+ * @note It represents both Advantages and Disadvantages.
  */
 class Advantage
 {
@@ -70,22 +73,6 @@ class Advantage
         $this->path = $path;
 
         $this->label = $this->makeTraitLabel($this->array);
-    }
-
-    /**
-     * @return string
-     */
-    public function getJson(): string
-    {
-        return $this->json;
-    }
-
-    /**
-     * @return array
-     */
-    public function getArray(): array
-    {
-        return $this->array;
     }
 
     private function makeTraitLabel(array $array): string
@@ -244,7 +231,7 @@ class Advantage
         return "\\label{trait{$this->label}}";
     }
 
-    private function dressStringInCommand(string $command, string $content): string
+    private function dressInCommand(string $command, string $content): string
     {
         return "\\newcommand{{$command}}{{$content}}";
     }
@@ -253,7 +240,11 @@ class Advantage
     {
         $requirements = !empty($this->requirements) ? ($this->makeCommand(CommandSuffix::Requirements)) : '';
 
-        return '\subsubsection{{' . $this->makeCommand(CommandSuffix::Name) . '} [' . $this->makeCommand(CommandSuffix::Cost) . ']' . '}' . $this->makeLabel()
+        return '\subsubsection{'
+            . '{' . $this->makeCommand(CommandSuffix::Name) . '} '
+            . '[' . $this->makeCommand(CommandSuffix::Cost) . ']'
+            . '}'
+            . $this->makeLabel()
             . PHP_EOL . PHP_EOL
             . $this->makeCommand(CommandSuffix::Tag)
             . PHP_EOL . PHP_EOL
@@ -270,7 +261,10 @@ class Advantage
 
     private function makeEntryLite(): string
     {
-        return '\subsubsection{{' . $this->makeCommand(CommandSuffix::Name) . '} [' . $this->makeCommand(CommandSuffix::Cost). ']' . '}'
+        return '\subsubsection{' .
+            '{' . $this->makeCommand(CommandSuffix::Name) . '} '
+            . '[' . $this->makeCommand(CommandSuffix::Cost) . ']'
+            . '}'
             . PHP_EOL . PHP_EOL
             . $this->makeCommand(CommandSuffix::Tag)
             . PHP_EOL . PHP_EOL
@@ -291,16 +285,17 @@ class Advantage
     public function makeCompleteTex(array $array): string
     {
         return implode(PHP_EOL, [
-            $this->dressStringInCommand($this->makeCommand(CommandSuffix::Name), $this->makeTraitName($array)),
-            $this->dressStringInCommand($this->makeCommand(CommandSuffix::Cost), $this->makeTraitCost($array)),
-            $this->dressStringInCommand($this->makeCommand(CommandSuffix::Tag), $this->makeTraitTag($array)),
-            $this->dressStringInCommand($this->makeCommand(CommandSuffix::Limit), $this->makeTraitLimit($array)),
-            $this->dressStringInCommand($this->makeCommand(CommandSuffix::Common), $this->makeTraitCommon($array)),
-            $this->dressStringInCommand($this->makeCommand(CommandSuffix::Rare), $this->makeTraitRare($array)),
-            $this->dressStringInCommand($this->makeCommand(CommandSuffix::Requirements), $this->makeTraitRequirements($array)),
-            $this->dressStringInCommand($this->makeCommand(CommandSuffix::Content), $this->makeTraitContent($array)),
+            $this->dressInCommand($this->makeCommand(CommandSuffix::Name), $this->makeTraitName($array)),
+            $this->dressInCommand($this->makeCommand(CommandSuffix::Cost), $this->makeTraitCost($array)),
+            $this->dressInCommand($this->makeCommand(CommandSuffix::Tag), $this->makeTraitTag($array)),
+            $this->dressInCommand($this->makeCommand(CommandSuffix::Limit), $this->makeTraitLimit($array)),
+            $this->dressInCommand($this->makeCommand(CommandSuffix::Common), $this->makeTraitCommon($array)),
+            $this->dressInCommand($this->makeCommand(CommandSuffix::Rare), $this->makeTraitRare($array)),
+            $this->dressInCommand($this->makeCommand(CommandSuffix::Requirements),
+                $this->makeTraitRequirements($array)),
+            $this->dressInCommand($this->makeCommand(CommandSuffix::Content), $this->makeTraitContent($array)),
             PHP_EOL,
-            $this->dressStringInCommand($this->makeCommand(CommandSuffix::PackLite), $this->makeEntryLite())
+            $this->dressInCommand($this->makeCommand(CommandSuffix::PackLite), $this->makeEntryLite())
         ]);
     }
 

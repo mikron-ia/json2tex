@@ -6,7 +6,7 @@ namespace Mikron\json2tex\Domain\Entity;
  * Simple wrapper on styles
  *
  * @todo Add loading from file
- * 
+ *
  * @package Mikron\json2tex\Domain\Entity
  */
 class StylePack
