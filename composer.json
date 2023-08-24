@@ -1,7 +1,8 @@
 {
   "name": "mikron-ia/json2tex",
-  "license": "GPL-2.0",
-  "version": "0.0-dev",
+  "license": "GPL-2.0-or-later",
+  "version": "0.1",
+  "description": "A simple JSON-to-TeX converter script, intended for specialized application",
   "authors": [
     {
       "name": "Mikron",
