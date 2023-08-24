@@ -193,7 +193,12 @@ DESCRIPTION;
         $content = '';
 
         foreach ($nodes as $node) {
-            $content .= "\t\t\t" . '\node[skill] at (' . $node['x'] . ', ' . $node['y'] . ') (' . $node['label'] . ') {' . $node['name'] . '};' . PHP_EOL;
+            $content .= "\t\t\t"
+                . '\node[skill] at '
+                . '(' . $node['x'] . ', ' . $node['y'] . ') '
+                . '(' . $node['label'] . ') '
+                . '{' . $node['name'] . '};'
+                . PHP_EOL;
         }
 
         return $content;
@@ -214,11 +219,10 @@ DESCRIPTION;
         foreach ($nodes as $node) {
             foreach ($node['requires'] ?? [] as $requirementLabel) {
                 if (empty($nodesByLabel[$requirementLabel])) {
-                    throw new MissingComponentException("Node $requirementLabel not found");
+                    throw new MissingComponentException('Node ' . $requirementLabel . ' not found');
                 }
-                $requiredNode = $nodesByLabel[$requirementLabel];
                 $content .= "\t\t\t" . '\draw[arrowreq] ('
-                    . $requiredNode['label'] . '.south) -- ('
+                    . $nodesByLabel[$requirementLabel]['label'] . '.south) -- ('
                     . $node['label'] . '.north);'
                     . PHP_EOL;
             }
