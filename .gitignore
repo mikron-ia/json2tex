@@ -5,3 +5,6 @@ nbproject/
 # Resources
 vendor/
 data/
+
+# Temporary test files
+tests/*.cache
