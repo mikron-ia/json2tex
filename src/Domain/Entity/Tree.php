@@ -7,57 +7,35 @@ use Mikron\json2tex\Domain\Exception\MissingComponentException;
 
 class Tree
 {
-    /**
-     * @var array
-     */
-    private $array;
-
-    /**
-     * @var string
-     */
-    private $tex;
-
-    /**
-     * @var string
-     */
-    private $path;
-
-    /**
-     * @var string
-     */
-    private $figureBegin;
-
-    /**
-     * @var string
-     */
-    private $figureEnd;
-
-    /**
-     * Tree constructor.
-     * @param $json
-     * @param $path
-     * @throws MalformedJsonException
-     */
-    public function __construct($json, $path = "")
-    {
-        $this->array = json_decode($json, true);
-
-        if ($this->array === null) {
-            throw new MalformedJsonException('Wrong JSON format');
-        }
-
-        $this->path = $path;
-
-        $this->figureBegin = "\t\\begin{tikzpicture}[scale=1,yscale=-1]
+    private array $array;
+    private string $tex;
+    private string $path;
+    private string $figureBegin = "\t\\begin{tikzpicture}[scale=1,yscale=-1]
 \t\t\\tikzset{
 \t\t\tskill/.style={rectangle, rounded corners, draw=black, text centered, text width=5em, minimum height=4em},
 \t\t\tarrowreq/.style={->, >=latex', shorten >=1pt, thick}
 \t\t}";
+    private string $figureEnd = "\t\\end{tikzpicture}";
 
-        $this->figureEnd = "\t\\end{tikzpicture}";
+    /**
+     * @param string $json
+     * @param string $path
+     *
+     * @throws MalformedJsonException
+     */
+    public function __construct(string $json, string $path = "")
+    {
+        $array = json_decode($json, true);
+
+        if ($array === null) {
+            throw new MalformedJsonException('Wrong JSON format');
+        }
+
+        $this->array = $array;
+        $this->path = $path;
     }
 
-    private function makeCompleteTreeDrawing(string $interior)
+    private function makeCompleteTreeDrawing(string $interior): string
     {
         $caption = $this->array['caption'] ?? '';
         $aura = isset($this->array['aura']) ?
