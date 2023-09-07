@@ -3,7 +3,7 @@ engines:
     enabled: true
     config:
       file_extensions: "php"
-      rulesets: "codesize,controversial,design,unusedcode"
+      rulesets: "cleancode,codesize,controversial,design"
   phpcodesniffer:
     enabled: true
 
