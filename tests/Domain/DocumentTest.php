@@ -20,11 +20,30 @@ final class DocumentTest extends TestCase
     /**
      * @test
      */
+    public function isDocumentCreatedAtAll()
+    {
+        $document = new Document('{}');
+
+        $this->assertInstanceOf('Mikron\json2tex\Domain\Entity\Document', $document);
+    }
+
+    /**
+     * @test
+     */
     public function isDocumentCreatedCorrectly()
     {
-        $character = new Document('{}');
+        $document = new Document('{"trees": []}');
 
-        $this->assertInstanceOf('Mikron\json2tex\Domain\Entity\Document', $character);
+        $expected = '\documentclass[a4paper,final,12pt]{memoir}
+\providecommand\locale{english}
+
+\usepackage{tikz}
+\usetikzlibrary{arrows,positioning}' . PHP_EOL . PHP_EOL
+            . '\begin{document}' . PHP_EOL . PHP_EOL
+            . PHP_EOL
+            . '\end{document}' . PHP_EOL;
+
+        $this->assertEquals($expected, $document->getDocument());
     }
 
     /**

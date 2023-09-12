@@ -82,7 +82,7 @@ class Document
      */
     public function getDocument(): string
     {
-        if (!$this->document) {
+        if (empty($this->document)) {
             $top = '\documentclass[a4paper,final,12pt]{memoir}
 \providecommand\locale{english}
 
