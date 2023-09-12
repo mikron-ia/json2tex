@@ -8,29 +8,20 @@ use PHPUnit\Framework\TestCase;
 
 final class DocumentTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function isDocumentCreatedOnEmpty()
+    public function testIsDocumentCreatedOnEmpty()
     {
         $this->expectException(MalformedJsonException::class);
         new Document('');
     }
 
-    /**
-     * @test
-     */
-    public function isDocumentCreatedAtAll()
+    public function testIsDocumentCreatedAtAll()
     {
         $document = new Document('{}');
 
         $this->assertInstanceOf('Mikron\json2tex\Domain\Entity\Document', $document);
     }
 
-    /**
-     * @test
-     */
-    public function isDocumentCreatedCorrectly()
+    public function testIsDocumentCreatedCorrectly()
     {
         $document = new Document('{"trees": []}');
 
@@ -47,13 +38,12 @@ final class DocumentTest extends TestCase
     }
 
     /**
-     * @test
      * @dataProvider correctDataProvider
      * @param array $data
      *
      * @throws MalformedJsonException
      */
-    public function isJsonReturnedCorrectly(array $data)
+    public function testIsJsonReturnedCorrectly(array $data)
     {
         $json = json_encode($data);
 
@@ -63,13 +53,12 @@ final class DocumentTest extends TestCase
     }
 
     /**
-     * @test
      * @dataProvider correctDataProvider
      * @param array $data
      *
      * @throws MalformedJsonException
      */
-    public function isArrayReturnedCorrectly(array $data)
+    public function testIsArrayReturnedCorrectly(array $data)
     {
         $json = json_encode($data);
 

@@ -7,20 +7,14 @@ use PHPUnit\Framework\TestCase;
 
 final class TreeTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function isTreeCreatedCorrectly()
+    public function testIsTreeCreatedCorrectly()
     {
         $object = new Tree('{}');
 
         $this->assertInstanceOf('Mikron\json2tex\Domain\Entity\Tree', $object);
     }
 
-    /**
-     * @test
-     */
-    public function isMalformedJSONDetected()
+    public function testIsMalformedJSONDetected()
     {
         $this->expectException('Mikron\json2tex\Domain\Exception\MalformedJsonException');
         new Tree('{fail:}');

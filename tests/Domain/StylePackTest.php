@@ -8,20 +8,14 @@ use PHPUnit\Framework\TestCase;
 
 final class StylePackTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function isStylePackCreatedCorrectly()
+    public function testIsStylePackCreatedCorrectly()
     {
         $object = new StylePack("");
 
         $this->assertInstanceOf('Mikron\json2tex\Domain\Entity\StylePack', $object);
     }
 
-    /**
-     * @test
-     */
-    public function isTexReturnedCorrectly()
+    public function testIsTexReturnedCorrectly()
     {
         $string = '\renewCommand{A}{B}';
         $tex = new StylePack($string);
@@ -29,10 +23,7 @@ final class StylePackTest extends TestCase
         $this->assertEquals($string, $tex->getTeX());
     }
 
-    /**
-     * @test
-     */
-    public function isToStringCorrect()
+    public function testIsToStringCorrect()
     {
         $string = '\renewCommand{A}{B}';
         $tex = new StylePack($string);

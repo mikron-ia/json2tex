@@ -7,10 +7,7 @@ use PHPUnit\Framework\TestCase;
 
 class SkillTest extends TestCase
 {
-    /**
-     * @test
-     */
-    public function isSkillCreatedCorrectly()
+    public function testIsSkillCreatedCorrectly()
     {
         $object = new Skill();
 
