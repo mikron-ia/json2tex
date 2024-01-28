@@ -4,6 +4,8 @@ namespace Mikron\json2tex\Domain\Entity;
 
 use Mikron\json2tex\Domain\Exception\MalformedJsonException;
 use Mikron\json2tex\Domain\Exception\MissingComponentException;
+use Mikron\json2tex\Domain\Service\LabelMakerDashed;
+use Mikron\json2tex\Domain\Service\LabelMakerInterface;
 
 class Tree
 {
@@ -16,6 +18,8 @@ class Tree
 \t\t\tarrowreq/.style={->, >=latex', shorten >=1pt, thick}
 \t\t}";
     private string $figureEnd = "\t\\end{tikzpicture}";
+
+    private LabelMakerInterface $labelMaker;
 
     /**
      * @param string $json
@@ -33,15 +37,17 @@ class Tree
 
         $this->array = $array;
         $this->path = $path;
+
+        $this->labelMaker = new LabelMakerDashed();
     }
 
     private function makeCompleteTreeDrawing(string $interior): string
     {
         $caption = $this->array['caption'] ?? '';
-        $label = $this->makeLabel(
+        $label = $this->labelMaker->makeLabel(
             $this->array['label'] ?? null,
             $this->array['caption'] ?? null,
-            $this->array['prefix'] ?? null
+            $this->array['prefix'] ?? 'subsec'
         );
         $aura = isset($this->array['aura']) ?
             '\\subsubsection{Aura}' . PHP_EOL . PHP_EOL .
@@ -289,30 +295,6 @@ DESCRIPTION;
         }
 
         return $insides;
-    }
-
-    private function makeLabel(?string $label = null, ?string $caption = null, ?string $prefix = null): string
-    {
-        if (!empty($label)) {
-            return $this->encaseLabel($label);
-        }
-
-        return $this->encaseLabel($this->formatPrefixForLabel($prefix) . $this->extractLabelFromCaption($caption));
-    }
-
-    private function extractLabelFromCaption(?string $caption): string
-    {
-        return str_replace([' ', "\t"], '-', str_replace(['`', '\'', '"'], '', strtolower($caption)));
-    }
-
-    private function formatPrefixForLabel($prefix): string
-    {
-        return (isset($prefix) ? strtolower($prefix) . '-' : '');
-    }
-
-    private function encaseLabel(string $labelContent): string
-    {
-        return '\\label{' . $labelContent . '}';
     }
 
     /**
