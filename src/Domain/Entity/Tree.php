@@ -38,6 +38,11 @@ class Tree
     private function makeCompleteTreeDrawing(string $interior): string
     {
         $caption = $this->array['caption'] ?? '';
+        $label = $this->makeLabel(
+            $this->array['label'] ?? null,
+            $this->array['caption'] ?? null,
+            $this->array['prefix'] ?? null
+        );
         $aura = isset($this->array['aura']) ?
             '\\subsubsection{Aura}' . PHP_EOL . PHP_EOL .
             str_replace('\n', PHP_EOL, implode(PHP_EOL . PHP_EOL, $this->array['aura'])) :
@@ -47,7 +52,7 @@ class Tree
             '';
 
         $begin = <<<TREESTART
-\\subsection{{$caption}}
+\\subsection{{$caption}}{$label}
 
 $description
 
@@ -284,6 +289,30 @@ DESCRIPTION;
         }
 
         return $insides;
+    }
+
+    private function makeLabel(?string $label = null, ?string $caption = null, ?string $prefix = null): string
+    {
+        if (!empty($label)) {
+            return $this->encaseLabel($label);
+        }
+
+        return $this->encaseLabel($this->formatPrefixForLabel($prefix) . $this->extractLabelFromCaption($caption));
+    }
+
+    private function extractLabelFromCaption(?string $caption): string
+    {
+        return str_replace([' ', "\t"], '-', str_replace(['`', '\'', '"'], '', strtolower($caption)));
+    }
+
+    private function formatPrefixForLabel($prefix): string
+    {
+        return (isset($prefix) ? strtolower($prefix) . '-' : '');
+    }
+
+    private function encaseLabel(string $labelContent): string
+    {
+        return '\\label{' . $labelContent . '}';
     }
 
     /**
