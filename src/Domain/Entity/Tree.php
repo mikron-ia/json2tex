@@ -4,7 +4,7 @@ namespace Mikron\json2tex\Domain\Entity;
 
 use Mikron\json2tex\Domain\Exception\MalformedJsonException;
 use Mikron\json2tex\Domain\Exception\MissingComponentException;
-use Mikron\json2tex\Domain\Service\LabelMakerDashed;
+use Mikron\json2tex\Domain\Service\LabelMakerSimple;
 use Mikron\json2tex\Domain\Service\LabelMakerInterface;
 
 class Tree
@@ -38,7 +38,7 @@ class Tree
         $this->array = $array;
         $this->path = $path;
 
-        $this->labelMaker = new LabelMakerDashed();
+        $this->labelMaker = new LabelMakerSimple();
     }
 
     private function makeCompleteTreeDrawing(string $interior): string
