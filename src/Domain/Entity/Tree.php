@@ -49,6 +49,7 @@ class Tree
             $this->array['caption'] ?? null,
             $this->array['prefix'] ?? 'subsec'
         );
+        $header = "\\subsection{{$caption}}{$label}";
         $aura = isset($this->array['aura']) ?
             '\\subsubsection{Aura}' . PHP_EOL . PHP_EOL .
             str_replace('\n', PHP_EOL, implode(PHP_EOL . PHP_EOL, $this->array['aura'])) :
@@ -58,9 +59,6 @@ class Tree
             '';
 
         $begin = <<<TREESTART
-\\subsection{{$caption}}{$label}
-
-$description
 
 \\begin{figure}[ht]
 \t\\centering
@@ -79,7 +77,10 @@ $aura
 
 TREEEND;
 
-        return $begin . $interior . $end . implode(PHP_EOL . PHP_EOL, $this->descriptions());
+        return $header
+            . $description
+            . (!empty($interior) ? $begin . $interior . $end : '')
+            . implode(PHP_EOL . PHP_EOL, $this->descriptions());
     }
 
     /**
