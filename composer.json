@@ -26,6 +26,6 @@
     "phpunit/phpunit": "^10.0"
   },
   "scripts": {
-    "test": "php vendor/phpunit/phpunit/phpunit --testdox --configuration ./tests/phpunit.xml"
+    "test": "php vendor/phpunit/phpunit/phpunit --testdox --configuration ./phpunit.xml"
   }
 }

@@ -5,6 +5,7 @@ nbproject/
 # Resources
 vendor/
 data/
+coverage/
 
 # Temporary test files
-tests/*.cache
+.phpunit.cache
