@@ -131,15 +131,14 @@ class Advantage
      */
     private function makeTraitLimit(array $array): string
     {
-        $limitList = $this->makeTraitDescribingList($array, 'limitedTo');
-        $creationOnly = $this->isCreationOnly($array) ? self::CREATION_ONLY_TAG : '';
+        $creationOnly = $this->isCreationOnly($array) ? self::CREATION_ONLY_TAG . PHP_EOL . PHP_EOL : '';
 
+        $limitText = '';
+        $forbiddenText = '';
+
+        $limitList = $this->makeTraitDescribingList($array, 'limitedTo');
         if ($limitList) {
-            return '\textit{' . ucfirst(implode(', ', $limitList)) . ' only}'
-                . PHP_EOL . PHP_EOL
-                . $creationOnly;
-        } else {
-            return $creationOnly;
+            $limitText = '\textit{' . ucfirst(implode(', ', $limitList)) . ' only}' . PHP_EOL . PHP_EOL;
         }
     }
 
