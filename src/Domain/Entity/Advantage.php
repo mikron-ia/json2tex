@@ -178,11 +178,9 @@ class Advantage
 
     private function makeTraitRequirements(array $array): string
     {
-        $this->requirements = '';
-
-        if (empty($this->requirements) && !empty($array['requirements'])) {
-            $this->requirements = '\textit{' . ucfirst(implode(', ', $array['requirements'])) . '}';
-        }
+        $this->requirements = !empty($array['requirements'])
+            ? '\textit{' . ucfirst(implode(', ', $array['requirements'])) . '}'
+            : '';
 
         return $this->requirements;
     }

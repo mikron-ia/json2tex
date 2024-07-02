@@ -77,7 +77,7 @@ class AdvantagePack
      * @throws MalformedJsonException
      * @throws MissingComponentException
      */
-    private function makeContentAndIndex()
+    private function makeContentAndIndex(): void
     {
         $traitTexes = [];
         $traitIndex = [];
